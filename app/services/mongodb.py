@@ -52,3 +52,11 @@ def store_query(query, model, steps, results):
     result = chat_collection.insert_one(query_dct)
     return result.inserted_id
 
+def store_likes(query_id, title, like):
+    db = get_db()
+    like_collection = db.like
+    like_dct = {'chats_id':query_id,
+                'title':title,
+                'like':like}
+    result = like_collection.insert_one(like_dct)
+    return result.inserted_id

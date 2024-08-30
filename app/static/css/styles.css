@@ -1,13 +1,27 @@
 /* Existing styles */
-body {
+/* body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
     margin: 0;
     padding: 0;
+} */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clean font */
+    background-color: #ffffff; /* White background for better contrast */
+    color: #333333; /* Dark gray text for better readability */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6; /* Improved line spacing for readability */
+    font-size: 16px; /* Set a comfortable base font size */
+    max-width: 1200px; /* Limit content width for better readability on large screens */
+    margin-left: auto; /* Center the content */
+    margin-right: auto; /* Center the content */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 .container {
-    max-width: 800px;
+    max-width: 500px;
     margin: 50px auto;
     background-color: #ffffff;
     padding: 20px;
@@ -44,9 +58,12 @@ h1 {
 }
 
 .carousel-image {
-    width: 100%;
-    height: auto; /* Maintain aspect ratio */
+    width: 100%; /* Make sure the image scales with the container width */
+    height: 550px; /* Fixed height for the image */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
     display: block;
+    margin-left: auto; /* Center the image horizontally */
+    margin-right: auto; /* Center the image horizontally */
 }
 
 .carousel-title {
@@ -76,4 +93,19 @@ p {
 
 .slick-prev:hover, .slick-next:hover {
     background-color: #0056b3;
+}
+
+.like-button, .dislike-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 5px;
+}
+
+.dislike-button {
+    background-color: #dc3545;
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
+    <title>Results</title>
     <!-- Add Slick CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
@@ -14,12 +14,16 @@
         {% if results %}
             <div class="carousel">
                 {% for result in results %}
-                    <div class="carousel-item">
+                    <div class="carousel-item" data-id="{{ result._id }}">
                         <div class="carousel-image-wrapper">
                             <img src="{{ result.image }}" alt="{{ result.title }}" class="carousel-image">
                             <div class="carousel-title">{{ result.title }}</div>
                         </div>
                         <p>{{ result.description }}</p>
+                        <div class="carousel-actions">
+                            <button class="like-button" data-title="{{ result.title }}" data-query-id="{{ query_id }}">Like</button>
+                            <button class="dislike-button" data-title="{{ result.title }}" data-query-id="{{ query_id }}">Dislike</button>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -34,5 +38,6 @@
 
     <!-- Include external JavaScript file -->
     <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.js') }}"></script>
 </body>
 </html>
