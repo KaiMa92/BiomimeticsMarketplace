@@ -24,7 +24,7 @@ def search():
     openai_client = current_app.openai_client
     
     # Pass the client to the function
-    results = bioinspire(query, "gpt-4", openai_client)
+    results = bioinspire(query, "gpt-4", openai_client, ["CoreKeywordFinder1","Synonymfinder2","SpeciestoJASON4"])
     
     # Return the results to the results.html page
     return render_template('results.html', results=results)

@@ -14,10 +14,13 @@ def get_db():
     # Access the database from the current app context
     return current_app.db
 
-def insert_assistant(assistant):
+def insert_assistant(name,type,system_prompt):
     db = get_db()
     configs_collection = db.assistants
-    result = configs_collection.insert_one(assistant)
+    assistant_dct = {'name': name,
+                     'type': type,
+                     'system_prompt':system_prompt}
+    result = configs_collection.insert_one(assistant_dct)
     return result.inserted_id
 
 def load_assistant(assistant_id=None,  assistant_name=None):
@@ -39,13 +42,13 @@ def get_all_assistants():
     name_list = [doc["name"] for doc in names]
     return name_list
 
-
-#assistant = {'name': 'name',
-#   'type': 'type',
-#   'system_prompt': 'system_prompt'}
-
-
-def insert_chat(db, chat):
+def store_query(query, model, steps, results):
+    db = get_db()
     chat_collection = db.chats
-    result = chat_collection.insert_one(chat)
+    query_dct = {'query': query,
+                 'model': model, 
+                 'steps': steps,
+                 'results': results}
+    result = chat_collection.insert_one(query_dct)
     return result.inserted_id
+
