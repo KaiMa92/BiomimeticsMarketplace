@@ -22,10 +22,17 @@ def index():
 def search():
     query = request.form.get('query')
     # Access openai_client from current_app
+
+    if not query or len(query.strip()) == 0:
+            # Flash a message to indicate the error
+            flash("Query cannot be empty. Please enter a valid query.")
+            # Redirect to the index page
+            return redirect(url_for('main.index'))
+
     openai_client = current_app.openai_client
     
     # Pass the client to the function
-    results, query_id = likeable(query, "gpt-4", openai_client, ["CoreKeywordFinder1","Synonymfinder2","SpeciestoJASON4"])
+    results, query_id = likeable(query, "gpt-4o", openai_client, ["CoreKeywordFinder1","Synonymfinder2","SpeciestoJASON4"])
     
     # Return the results to the results.html page
     return render_template('results.html', results=results, query_id=query_id)

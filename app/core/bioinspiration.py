@@ -11,9 +11,7 @@
 #categorize --> off-topic, Biology push, Technology pull
 from .utils import create_results, string_to_json
 from app.services.llm import assisted_chat
-from app.services.mongodb import store_query
-
-#["CoreKeywordFinder1","Synonymfinder2","SpeciestoJASON4"]
+from app.services.mongodb import store_query, load_assistant
 
 def bioinspire(query, model, client, steps_config):
     if query == 'test':
@@ -25,7 +23,8 @@ def bioinspire(query, model, client, steps_config):
         input_data = query
         
         for step in steps_config:
-            output_data = assisted_chat(input_data, step, model, client)
+            system_prompt = load_assistant(assistant_name = step)["system_prompt"]
+            output_data = assisted_chat(input_data, system_prompt, model, client)
             steps.append({"step_name": step, "output": output_data})
             input_data = output_data  # Feed the output of one step as input to the next
         
