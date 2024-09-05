@@ -9,8 +9,8 @@
 """
 
 from flask import Blueprint, render_template, request, current_app, jsonify
-from app.services.mongodb import store_likes
-from .core.like import likeable
+from app.services.mongodb import store_likes, load_query
+from .core.bioinspiration import bioinspire
 
 main = Blueprint('main', __name__)
 
@@ -29,13 +29,22 @@ def search():
             # Redirect to the index page
             return redirect(url_for('main.index'))
 
-    openai_client = current_app.openai_client
-    
-    # Pass the client to the function
-    results, query_id = likeable(query, "gpt-4o", openai_client, ["CoreKeywordFinder1","Synonymfinder2","SpeciestoJASON4"])
+
+    query_id = bioinspire(query, "gpt-4o", current_app.openai_client, ["CoreKeywordFinder1","Synonymfinder2","SpeciestoJASON4"])
     
     # Return the results to the results.html page
-    return render_template('results.html', results=results, query_id=query_id)
+    return render_template('results.html', query_id=query_id)
+
+@main.route('/get-results/<query_id>', methods=['GET'])
+def get_results(query_id):
+    # Load results from the database
+    query = load_query(query_id)
+    
+    if not query:
+        return jsonify({"error": "No results found for the given query ID."}), 404
+
+    return jsonify(query)
+
 
 @main.route('/like', methods=['POST'])
 def like_result():

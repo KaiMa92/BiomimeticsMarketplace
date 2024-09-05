@@ -35,7 +35,7 @@ def bioinspire(query, model, client, steps_config):
         # Store the query, steps, and results in MongoDB
         query_id = store_query(query, model, steps, results)
 
-    return results, query_id
+    return query_id
 
 
 

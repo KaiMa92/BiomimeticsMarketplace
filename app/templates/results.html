@@ -11,33 +11,25 @@
 </head>
 <body>
     <div class="container">
-        {% if results %}
-            <div class="carousel">
-                {% for result in results %}
-                    <div class="carousel-item" data-id="{{ result._id }}">
-                        <div class="carousel-image-wrapper">
-                            <img src="{{ result.image }}" alt="{{ result.title }}" class="carousel-image">
-                            <div class="carousel-title">{{ result.title }}</div>
-                        </div>
-                        <p>{{ result.description }}</p>
-                        <div class="carousel-actions">
-                            <button class="like-button" data-title="{{ result.title }}" data-query-id="{{ query_id }}">Like</button>
-                            <button class="dislike-button" data-title="{{ result.title }}" data-query-id="{{ query_id }}">Dislike</button>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p>No results found.</p>
-        {% endif %}
+        <!-- Placeholder for dynamically loaded content -->
+        <div class="carousel" id="results-carousel">
+            <!-- Results will be dynamically injected here -->
+        </div>
+        <p id="no-results-message" style="display:none;">No results found.</p> <!-- Hidden message for no results -->
     </div>
 
     <!-- Add jQuery and Slick JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
-    <!-- Include external JavaScript file -->
+    <!-- Include external JavaScript files -->
     <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
     <script src="{{ url_for('static', filename='js/buttons.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/load_query.js') }}"></script> <!-- New JS file for loading query -->
+
+    <!-- Pass query_id to JavaScript -->
+    <script>
+        const queryId = "{{ query_id }}";  // Pass the query ID from Flask to JavaScript
+    </script>
 </body>
 </html>

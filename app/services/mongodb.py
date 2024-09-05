@@ -9,6 +9,7 @@
 """
 
 from flask import current_app
+from bson import ObjectId
 
 def get_db():
     # Access the database from the current app context
@@ -51,6 +52,13 @@ def store_query(query, model, steps, results):
                  'results': results}
     result = chat_collection.insert_one(query_dct)
     return result.inserted_id
+
+def load_query(query_id):
+    db = get_db()
+    chat_collection = db.chats
+    query = chat_collection.find_one({'_id': ObjectId(query_id)})
+    query['_id'] = str(query['_id'])
+    return query
 
 def store_likes(query_id, title, like):
     db = get_db()
