@@ -1,21 +1,25 @@
 // static/js/load_query.js
+
 $(document).ready(function () {
+    console.log('Using queryId:', queryId); // Debugging
+
     // Function to fetch query results from the server
     function fetchQueryResults(queryId) {
-        $.ajax({
-            url: `/get-results/${queryId}`,  // Flask route to fetch results
-            method: 'GET',
-            success: function (data) {
-                if (data && data.results.length > 0) {
+        // Make an AJAX request to get the results
+        $.getJSON('/api/results/' + queryId, function (data) {
+            if (data.error) {
+                $('#no-results-message').show();
+            } else {
+                if (data.results && data.results.length > 0) {
                     renderResults(data.results);  // Render the actual results
-                    window.initializeCarousel(); // Initialize the carousel after loading results
+                    // Initialize the carousel after loading results
+                    $('#results-carousel').slick();
                 } else {
                     $('#no-results-message').show();  // Show "No results found" message
                 }
-            },
-            error: function (err) {
-                $('#results-carousel').html('<p>Error loading results. Please try again later.</p>');
             }
+        }).fail(function () {
+            $('#results-carousel').html('<p>Error loading results. Please try again later.</p>');
         });
     }
 
@@ -46,3 +50,4 @@ $(document).ready(function () {
     // Call the function to fetch query results when the page loads
     fetchQueryResults(queryId);
 });
+

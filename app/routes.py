@@ -8,42 +8,84 @@
 @Version: 0.0.
 """
 
-from flask import Blueprint, render_template, request, current_app, jsonify
-from app.services.mongodb import store_likes, load_query
-from .core.bioinspiration import bioinspire
+from flask import Blueprint, render_template, request, current_app, jsonify, session, Response, stream_with_context
+from app.services.mongodb import store_likes, load_query, store_query
+from app.core.bioinspiration import bioinspire, test
+import uuid
+import json
+
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
+    if 'session_id' not in session:
+        session['session_id'] = str(uuid.uuid4())
+    print(session['session_id'])
     return render_template('index.html')
 
-@main.route('/search', methods=['POST'])
-def search():
-    query = request.form.get('query')
-    # Access openai_client from current_app
-
+@main.route('/start')
+def start():
+    query = request.args.get('query', '')
     if not query or len(query.strip()) == 0:
-            # Flash a message to indicate the error
-            flash("Query cannot be empty. Please enter a valid query.")
-            # Redirect to the index page
-            return redirect(url_for('main.index'))
+        return "Query cannot be empty.", 400
+
+    def generate():
+        for output in test(query):
+            if output['type'] == 'progress':
+                yield f"data: {output['message']}\n\n"
+            elif output['type'] == 'results':
+                query_id = output['query_id']
+                # Send 'done' event with 'query_id' as JSON data
+                data = json.dumps({'query_id': str(query_id)})
+                yield f"event: done\ndata: {data}\n\n"
+    return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 
-    query_id = bioinspire(query, "gpt-4o", current_app.openai_client, ["CoreKeywordFinder1","Synonymfinder2","SpeciestoJASON4"])
-    
-    # Return the results to the results.html page
+
+
+@main.route('/results')
+def results():
+    query_id = request.args.get('query_id')
+    print('It works', query_id)
+    if not query_id:
+        return "No query ID provided.", 400
+    print('Received query_id in /results route:', query_id)  # Debugging
     return render_template('results.html', query_id=query_id)
 
-@main.route('/get-results/<query_id>', methods=['GET'])
-def get_results(query_id):
-    # Load results from the database
-    query = load_query(query_id)
-    
-    if not query:
-        return jsonify({"error": "No results found for the given query ID."}), 404
 
-    return jsonify(query)
+
+@main.route('/api/results/<query_id>')
+def api_results(query_id):
+    result_doc = load_query(query_id)
+    if not result_doc or 'results' not in result_doc:
+        return jsonify({'error': 'No results found'}), 404
+    return jsonify({'results': result_doc['results']})
+
+
+# @main.route('/api/results/<query_id>')
+# def api_results(query_id):
+#     result_doc = load_query(query_id)
+#     if not result_doc or 'results' not in result_doc:
+#         return jsonify({'error': 'No results found'}), 404
+#     return jsonify({'results': result_doc['results']})
+
+# # API endpoint to retrieve results as JSON
+# @main.route('/api/results/<query_id>')
+# def api_results(query_id):
+#     result_doc = collection.find_one({'session_id': query_id})
+#     if not result_doc or 'results' not in result_doc:
+#         return jsonify({'error': 'No results found'}), 404
+#     return jsonify(result_doc['results'])
+
+# def get_results():
+#     # Load results from the database
+#     query = load_query(query_id)
+    
+#     if not query:
+#         return jsonify({"error": "No results found for the given query ID."}), 404
+
+#     return jsonify(query)
 
 
 @main.route('/like', methods=['POST'])

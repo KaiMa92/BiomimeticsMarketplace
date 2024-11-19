@@ -16,6 +16,7 @@ from .config.development import DevelopmentConfig as Config
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)  # Load config from Config class
+    app.secret_key = 'your_secret_key'
 
     # Initialize MongoDB
     mongo_client = MongoClient(app.config['MONGO_HOST'], app.config['MONGO_PORT'])

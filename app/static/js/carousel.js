@@ -14,4 +14,3 @@ $(document).ready(function() {
     // Export the function to be used in other files
     window.initializeCarousel = initializeCarousel;
 });
-

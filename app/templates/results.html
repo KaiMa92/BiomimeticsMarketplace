@@ -1,3 +1,5 @@
+<!-- templates/results.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +17,7 @@
         <div class="carousel" id="results-carousel">
             <!-- Results will be dynamically injected here -->
         </div>
-        <p id="no-results-message" style="display:none;">No results found.</p> <!-- Hidden message for no results -->
+        <p id="no-results-message" style="display:none;">No results found.</p>
     </div>
 
     <!-- Add jQuery and Slick JS -->
@@ -25,7 +27,7 @@
     <!-- Include external JavaScript files -->
     <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
     <script src="{{ url_for('static', filename='js/buttons.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/load_query.js') }}"></script> <!-- New JS file for loading query -->
+    <script src="{{ url_for('static', filename='js/load_query.js') }}"></script>
 
     <!-- Pass query_id to JavaScript -->
     <script>

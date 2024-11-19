@@ -1,18 +1,55 @@
+<!-- templates/index.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search for Inspiration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
         <h1>Get inspired by Nature</h1>
-        <form action="{{ url_for('main.search') }}" method="POST">
-            <input type="text" class= "search-input" name="query" placeholder="Type your search query here..." required>
-            <button type="submit">Search</button>
+        <form id="searchForm">
+            <input type="text" id="search" class="search-input" name="query" placeholder="Type your search query here..." required>
+            <button type="submit" id="startButton">Search</button>
         </form>
     </div>
+    <div id="progress"></div>
+
+
+    <script>
+        document.getElementById('searchForm').onsubmit = function(event) {
+            event.preventDefault();
+
+            var userInput = document.getElementById('search').value;
+            var source = new EventSource('/start?query=' + encodeURIComponent(userInput));
+
+            source.onmessage = function(event) {
+                var progressDiv = document.getElementById('progress');
+                var newElement = document.createElement("div");
+                newElement.innerHTML = event.data;
+                progressDiv.appendChild(newElement);
+                console.log('Progress update:', event.data);  // Debugging
+            };
+
+            // Listen for the 'done' event
+            source.addEventListener('done', function(event) {
+                source.close();
+                console.log('Received done event with data:', event.data); // Debugging
+                var data = JSON.parse(event.data);
+                var queryId = data.query_id;
+                console.log('Extracted queryId:', queryId); // Debugging
+                // Redirect to the results page with queryId as a URL parameter
+                window.location.href = '/results?query_id=' + encodeURIComponent(queryId);
+            });
+
+            source.onerror = function(err) {
+                console.error("EventSource failed:", err);
+                source.close();
+            };
+        };
+    </script>
+
 </body>
 </html>
