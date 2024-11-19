@@ -40,8 +40,14 @@ def test(input_text):
     """
     # Simulate processing steps
     for i in range(1, 5):
-        time.sleep(2)
-        yield {'type': 'progress', 'message': f"Processing step {i} for input from test: {input_text}"}
+# First message: 'Process i running...'
+        yield {'type': 'progress', 'message': f'Process {i} running...'}
+        time.sleep(1)  # Simulate some processing time
+        # Second message: '... {process output data}'
+        process_output_data = f'Result of process {i} for input "{input_text}"'
+        yield {'type': 'progress', 'message': f'... {process_output_data}'}
+
+    
     
     # After processing, yield the final results
     results = [
