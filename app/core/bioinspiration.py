@@ -83,13 +83,25 @@ def bioinspire(query, model, client, steps_config):
 #     yield {'type': 'results', 'data': results, 'query_id': query_id}
 
 def biomimetics_marketplace(query, model, client): 
-    # 1. Does question make sense?
-    # 2. Who am I talking to?
-    # 3. if biologist:          if engineer: 
+
     query_id = str(uuid.uuid4())
     categorizer = agent('Categorize1', model, client)
 
+    
     yield {'type': 'progress', 'message': categorizer.process_prompt}
-    output = categorizer.chat_and_safe(query, query_id, 0)
-    yield {'type': 'progress', 'message': output}
+    categorie = categorizer.chat_and_safe(query, query_id, 0)
+    yield {'type': 'progress', 'message': categorie}
 
+    if "Engineering" in categorie: 
+        condenser = agent('QueryCondenser1', model, client)
+        yield {'type': 'progress', 'message': condenser.process_prompt}
+        condensed_query = condenser.chat_and_safe(query, query_id, 1)
+        yield {'type': 'progress', 'message': condensed_query}
+        # collect concepts
+        # translate concepts
+        # get role models
+        pass
+    elif "Biology" in categorie: 
+        pass
+    else: 
+        pass
