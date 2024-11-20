@@ -10,7 +10,7 @@
 
 #categorize --> off-topic, Biology push, Technology pull
 from .utils import create_results, string_to_json
-from app.services.llm import assisted_chat
+from app.services.llm import assisted_chat, agent
 from app.services.mongodb import store_query, load_assistant
 import time
 
@@ -33,18 +33,25 @@ def bioinspire(query, model, client, steps_config):
 
     return query_id
 
+def test_function_1(input_text): 
+    yield f'test_function 1 process started...'
+    time.sleep(2)
+    #process
+    return 'output data process 1'
+
 def test(input_text):
     """
     Simulates processing the input text and yields progress updates.
     At the end, yields the final results.
     """
+    
     # Simulate processing steps
     for i in range(1, 5):
 # First message: 'Process i running...'
         yield {'type': 'progress', 'message': f'Process {i} running...'}
-        time.sleep(1)  # Simulate some processing time
+        time.sleep(2)  # Simulate some processing time
         # Second message: '... {process output data}'
-        process_output_data = f'Result of process {i} for input "{input_text}"'
+        process_output_data = f'\t\tResult of process {i} for input "{input_text}"'
         yield {'type': 'progress', 'message': f'... {process_output_data}'}
 
     
@@ -73,5 +80,12 @@ def test(input_text):
 
 
     yield {'type': 'results', 'data': results, 'query_id': query_id}
+
+def test(input_text): 
+    # 1. Does question make sense?
+    # 2. Who am I talking to?
+    # 3. if biologist:          if engineer: 
+    
+    pass
 
 

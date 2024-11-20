@@ -9,6 +9,7 @@
 """
 
 from llama_index.core import StorageContext, load_index_from_storage, Settings
+from app.services.mongodb import load_assistant, store_query
     
 def assistant_conversation(client, model, user_content, assistant_content):
     chat_completion = client.chat.completions.create(
@@ -24,6 +25,34 @@ def assisted_chat(query, system_prompt, model, client):
     results = assistant_conversation(client, model, query, system_prompt)
     result = results.choices[0].message.content
     return result
+
+class agent:
+    def __init__(self, name, model, client, conversation_id = None, query_counter = None):
+        self.name = name
+        self.model = model 
+        self.client = client
+        self.conversation_id = conversation_id
+        self.query_counter = query_counter
+        self.system_prompt = load_assistant(assistant_name = name)["system_prompt"]
+        self.process_prompt = load_assistant(assistant_name = name)["process_prompt"]
+    
+    def chat(self,query):
+        chat_completion = self.client.chat.completions.create(
+        messages=[
+            {"role": "system", "content": self.system_prompt},
+            {"role": "user", "content": query}
+        ],
+        model=model,
+        )
+        result = chat_completion.choices[0].message.content
+        return result
+    
+    def chat_and_safe(self, query):
+        result = self.chat(query)
+        store_query(query, self.model, self.query_id, self.query_counter, result)
+
+
+    
 
 class index_chat:
     def __init__(self, index_path, embed_model, llm_model):
