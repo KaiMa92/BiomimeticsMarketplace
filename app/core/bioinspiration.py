@@ -82,6 +82,10 @@ def bioinspire(query, model, client, steps_config):
 
 #     yield {'type': 'results', 'data': results, 'query_id': query_id}
 
+def format_multiline(text):
+    formatted_data = text.replace('\n', '<br>')
+    return formatted_data
+
 def biomimetics_marketplace(query, model, client): 
 
     query_id = str(uuid.uuid4())
@@ -93,11 +97,20 @@ def biomimetics_marketplace(query, model, client):
     yield {'type': 'progress', 'message': categorie}
 
     if "Engineering" in categorie: 
+        #Condense input
         condenser = agent('QueryCondenser1', model, client)
         yield {'type': 'progress', 'message': condenser.process_prompt}
         condensed_query = condenser.chat_and_safe(query, query_id, 1)
         yield {'type': 'progress', 'message': condensed_query}
-        # collect concepts
+
+        #Brainstorm concepts
+        brainstormer = agent("ConceptSuggestor1", model, client)
+        yield {'type': 'progress', 'message': brainstormer.process_prompt}
+        concepts = brainstormer.chat_and_safe(condensed_query, query_id, 2)
+        print(concepts)
+        yield {'type': 'progress', 'message': format_multiline(concepts)}
+
+
         # translate concepts
         # get role models
         pass

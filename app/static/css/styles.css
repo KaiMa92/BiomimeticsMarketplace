@@ -109,3 +109,14 @@ p {
 .dislike-button {
     background-color: #dc3545;
 }
+
+.left-align {
+    text-align: left;
+    background-color: #f0f0f0;
+    padding: 10px;
+}
+.right-align {
+    text-align: right;
+    background-color: #e0e0e0;
+    padding: 10px;
+}

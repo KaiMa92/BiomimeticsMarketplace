@@ -19,6 +19,7 @@
 
 
     <script>
+        var messageCount = 0;
         document.getElementById('searchForm').onsubmit = function(event) {
             event.preventDefault();
 
@@ -29,6 +30,17 @@
                 var progressDiv = document.getElementById('progress');
                 var newElement = document.createElement("div");
                 newElement.innerHTML = event.data;
+
+                // Increment the message counter
+                messageCount += 1;
+
+                // Assign class based on whether the count is odd or even
+                if (messageCount % 2 === 0) {
+                    newElement.classList.add('right-align');
+                } else {
+                    newElement.classList.add('left-align');
+                }
+
                 progressDiv.appendChild(newElement);
                 console.log('Progress update:', event.data);  // Debugging
             };
