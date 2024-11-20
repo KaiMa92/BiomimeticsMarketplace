@@ -27,12 +27,10 @@ def assisted_chat(query, system_prompt, model, client):
     return result
 
 class agent:
-    def __init__(self, name, model, client, conversation_id = None, query_counter = None):
+    def __init__(self, name, model, client):
         self.name = name
         self.model = model 
         self.client = client
-        self.conversation_id = conversation_id
-        self.query_counter = query_counter
         self.system_prompt = load_assistant(assistant_name = name)["system_prompt"]
         self.process_prompt = load_assistant(assistant_name = name)["process_prompt"]
     
@@ -42,14 +40,15 @@ class agent:
             {"role": "system", "content": self.system_prompt},
             {"role": "user", "content": query}
         ],
-        model=model,
+        model=self.model,
         )
         result = chat_completion.choices[0].message.content
         return result
     
-    def chat_and_safe(self, query):
+    def chat_and_safe(self, query, query_id, query_counter):
         result = self.chat(query)
-        store_query(query, self.model, self.query_id, self.query_counter, result)
+        store_query(query, self.model, query_id, query_counter, result)
+        return result
 
 
     

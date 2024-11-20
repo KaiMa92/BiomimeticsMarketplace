@@ -17,7 +17,7 @@ def get_db():
 
 def insert_assistant(name, system_prompt, process_prompt):
     db = get_db()
-    configs_collection = db.assistants
+    configs_collection = db.agents
     assistant_dct = {'name': name,
                      'system_prompt':system_prompt, 
                      'process_prompt': process_prompt}
@@ -26,7 +26,8 @@ def insert_assistant(name, system_prompt, process_prompt):
 
 def load_assistant(assistant_id=None,  assistant_name=None):
     db = get_db()
-    configs_collection = db.assistants
+    print(db)
+    configs_collection = db.agents
     query = {}
     if  assistant_id:
         query["config_id"] =  assistant_id
@@ -35,6 +36,7 @@ def load_assistant(assistant_id=None,  assistant_name=None):
     else:
         raise ValueError("Either config_id or config_name must be provided")
     assistant = configs_collection.find_one(query)
+    print(assistant)
     return assistant
 
 def get_all_assistants():

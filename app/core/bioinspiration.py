@@ -13,6 +13,7 @@ from .utils import create_results, string_to_json
 from app.services.llm import assisted_chat, agent
 from app.services.mongodb import store_query, load_assistant
 import time
+import uuid
 
 def bioinspire(query, model, client, steps_config):
     steps = []
@@ -33,59 +34,62 @@ def bioinspire(query, model, client, steps_config):
 
     return query_id
 
-def test_function_1(input_text): 
-    yield f'test_function 1 process started...'
-    time.sleep(2)
-    #process
-    return 'output data process 1'
+# def test_function_1(input_text): 
+#     yield f'test_function 1 process started...'
+#     time.sleep(2)
+#     #process
+#     return 'output data process 1'
 
-def test(input_text):
-    """
-    Simulates processing the input text and yields progress updates.
-    At the end, yields the final results.
-    """
+# def test(input_text):
+#     """
+#     Simulates processing the input text and yields progress updates.
+#     At the end, yields the final results.
+#     """
     
-    # Simulate processing steps
-    for i in range(1, 5):
-# First message: 'Process i running...'
-        yield {'type': 'progress', 'message': f'Process {i} running...'}
-        time.sleep(2)  # Simulate some processing time
-        # Second message: '... {process output data}'
-        process_output_data = f'\t\tResult of process {i} for input "{input_text}"'
-        yield {'type': 'progress', 'message': f'... {process_output_data}'}
+#     # Simulate processing steps
+#     for i in range(1, 5):
+# # First message: 'Process i running...'
+#         yield {'type': 'progress', 'message': f'Process {i} running...'}
+#         time.sleep(2)  # Simulate some processing time
+#         # Second message: '... {process output data}'
+#         process_output_data = f'\t\tResult of process {i} for input "{input_text}"'
+#         yield {'type': 'progress', 'message': f'... {process_output_data}'}
 
     
     
-    # After processing, yield the final results
-    results = [
-        {
-            'title': 'Podargidae',
-            'description': 'The family Podargidae, which includes frogmouth birds, is known for their specialized wing structures that are optimized for silent and efficient flight. Their feathers have a lightweight and composite structure that reduces wing loading and optimizes lift-to-drag ratio. This structural optimization is crucial for a biomimetic aerial payload delivery system that needs to be light and efficient.',
-            'image': 'https://upload.wikimedia.org/wikipedia/commons/9/90/Tawny_Frogmouth_%28Coverdale%29.jpg'
-        },
-        {
-            'title': 'Danaus plexippus',
-            'description': 'The Monarch butterfly (Danaus plexippus) showcases an exoskeleton with lightweight chitinous structures that provide strength without heavy mass. Their wings allow for highly efficient lift with low drag, crucial for long migratory flights. These traits can inspire lightweight composite materials for structural optimization in aerial delivery systems.',
-            'image': 'https://upload.wikimedia.org/wikipedia/commons/e/e4/Danaus_plexippus_MHNT.jpg'
-        }
-    ]
+#     # After processing, yield the final results
+#     results = [
+#         {
+#             'title': 'Podargidae',
+#             'description': 'The family Podargidae, which includes frogmouth birds, is known for their specialized wing structures that are optimized for silent and efficient flight. Their feathers have a lightweight and composite structure that reduces wing loading and optimizes lift-to-drag ratio. This structural optimization is crucial for a biomimetic aerial payload delivery system that needs to be light and efficient.',
+#             'image': 'https://upload.wikimedia.org/wikipedia/commons/9/90/Tawny_Frogmouth_%28Coverdale%29.jpg'
+#         },
+#         {
+#             'title': 'Danaus plexippus',
+#             'description': 'The Monarch butterfly (Danaus plexippus) showcases an exoskeleton with lightweight chitinous structures that provide strength without heavy mass. Their wings allow for highly efficient lift with low drag, crucial for long migratory flights. These traits can inspire lightweight composite materials for structural optimization in aerial delivery systems.',
+#             'image': 'https://upload.wikimedia.org/wikipedia/commons/e/e4/Danaus_plexippus_MHNT.jpg'
+#         }
+#     ]
 
-    # Example data
-    query = input_text
-    model = 'm'
-    steps_str = '1 2 and 3'
+#     # Example data
+#     query = input_text
+#     model = 'm'
+#     steps_str = '1 2 and 3'
 
-    # Call store_query and get query_id
-    query_id = store_query(query, model, steps_str, results)
+#     # Call store_query and get query_id
+#     query_id = store_query(query, model, steps_str, results)
 
 
-    yield {'type': 'results', 'data': results, 'query_id': query_id}
+#     yield {'type': 'results', 'data': results, 'query_id': query_id}
 
-def test(input_text): 
+def biomimetics_marketplace(query, model, client): 
     # 1. Does question make sense?
     # 2. Who am I talking to?
     # 3. if biologist:          if engineer: 
-    
-    pass
+    query_id = str(uuid.uuid4())
+    categorizer = agent('Categorize1', model, client)
 
+    yield {'type': 'progress', 'message': categorizer.process_prompt}
+    output = categorizer.chat_and_safe(query, query_id, 0)
+    yield {'type': 'progress', 'message': output}
 
