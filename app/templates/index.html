@@ -7,36 +7,36 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+    <div class="content-wrapper">
     <div class="header-container">
-        <!-- Main Logo at the top -->
+        <!-- Larger Main Logo at the top -->
         <img src="{{ url_for('static', filename='images/MarketplaceLogo.png') }}" alt="Main Logo" class="main-logo">
-
-        <!-- Title and Subtitle -->
-        <h1>Get Inspired by Nature</h1>
+        
+        <!-- Subtitle only (the main title "Get inspired by Nature" is removed) -->
         <h2 class="subtitle">
             Inspire Engineers to Solve Technical Challenges and Biologists to Transform Phenomena into Product Ideas.
         </h2>
     </div>
 
-    <div class="container">
-        <form id="searchForm">
-            <input type="text" id="search" class="search-input" name="query" placeholder="Type your search query here..." required>
-            <button type="submit" id="startButton">Search</button>
+        <form id="searchForm" class="search-form">
+            <input type="text" id="search" class="search-input" name="query" placeholder="Type your query here..." required>
+            <button type="submit" id="startButton" class="techy-button">Search</button>
         </form>
-    </div>
-    
+        <div class="spacer"></div>
+        <p class="author-info">Created by Max Kaiser</p>
     <div id="progress"></div>
 
     <!-- Footer logos and author info -->
     <div class="footer-section">
-        <p class="author-info">Created by Jane Doe</p>
+        
         <div class="footer-logos">
-            <img src="{{ url_for('static', filename='images/BMBF.jpg') }}" alt="Logo 1" class="footer-logo">
-            <img src="{{ url_for('static', filename='images/Senckenberg.png') }}" alt="Logo 2" class="footer-logo">
-            <img src="{{ url_for('static', filename='images/THM.png') }}" alt="Logo 3" class="footer-logo">
-            <img src="{{ url_for('static', filename='images/IVW.png') }}" alt="Logo 4" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/BMBF.png') }}" alt="Logo 1" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/THM.png') }}" alt="Logo 2" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/Senckenberg.png') }}" alt="Logo 3" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/IVW.jpg') }}" alt="Logo 4" class="footer-logo">
         </div>
     </div>
+</div>
 
     <script src="{{ url_for('static', filename='js/progress_update.js') }}"></script>
 </body>
