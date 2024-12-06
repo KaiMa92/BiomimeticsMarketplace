@@ -1,5 +1,4 @@
 <!-- templates/index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,60 +7,37 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+    <div class="header-container">
+        <!-- Main Logo at the top -->
+        <img src="{{ url_for('static', filename='images/MarketplaceLogo.png') }}" alt="Main Logo" class="main-logo">
+
+        <!-- Title and Subtitle -->
+        <h1>Get Inspired by Nature</h1>
+        <h2 class="subtitle">
+            Inspire Engineers to Solve Technical Challenges and Biologists to Transform Phenomena into Product Ideas.
+        </h2>
+    </div>
+
     <div class="container">
-        <h1>Get inspired by Nature</h1>
         <form id="searchForm">
             <input type="text" id="search" class="search-input" name="query" placeholder="Type your search query here..." required>
             <button type="submit" id="startButton">Search</button>
         </form>
     </div>
+    
     <div id="progress"></div>
 
+    <!-- Footer logos and author info -->
+    <div class="footer-section">
+        <p class="author-info">Created by Jane Doe</p>
+        <div class="footer-logos">
+            <img src="{{ url_for('static', filename='images/BMBF.jpg') }}" alt="Logo 1" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/Senckenberg.png') }}" alt="Logo 2" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/THM.png') }}" alt="Logo 3" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/IVW.png') }}" alt="Logo 4" class="footer-logo">
+        </div>
+    </div>
 
-    <script>
-        var messageCount = 0;
-        document.getElementById('searchForm').onsubmit = function(event) {
-            event.preventDefault();
-
-            var userInput = document.getElementById('search').value;
-            var source = new EventSource('/start?query=' + encodeURIComponent(userInput));
-
-            source.onmessage = function(event) {
-                var progressDiv = document.getElementById('progress');
-                var newElement = document.createElement("div");
-                newElement.innerHTML = event.data;
-
-                // Increment the message counter
-                messageCount += 1;
-
-                // Assign class based on whether the count is odd or even
-                if (messageCount % 2 === 0) {
-                    newElement.classList.add('right-align');
-                } else {
-                    newElement.classList.add('left-align');
-                }
-
-                progressDiv.appendChild(newElement);
-                console.log('Progress update:', event.data);  // Debugging
-            };
-
-            // Listen for the 'done' event
-            source.addEventListener('done', function(event) {
-                source.close();
-                console.log('Received done event with data:', event.data); // Debugging
-                var data = JSON.parse(event.data);
-                var queryId = data.query_id;
-                console.log('Extracted queryId:', queryId); // Debugging
-                // Redirect to the results page with queryId as a URL parameter
-                window.location.href = '/results?query_id=' + encodeURIComponent(queryId);
-            });
-
-            source.onerror = function(err) {
-                console.error("EventSource failed:", err);
-                source.close();
-            };
-        };
-    </script>
-
+    <script src="{{ url_for('static', filename='js/progress_update.js') }}"></script>
 </body>
 </html>

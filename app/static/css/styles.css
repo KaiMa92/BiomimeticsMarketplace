@@ -1,23 +1,37 @@
-/* Existing styles */
-/* body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-} */
-
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clean font */
-    background-color: #ffffff; /* White background for better contrast */
-    color: #333333; /* Dark gray text for better readability */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    color: #333333;
     margin: 0;
     padding: 0;
-    line-height: 1.6; /* Improved line spacing for readability */
-    font-size: 16px; /* Set a comfortable base font size */
-    max-width: 1200px; /* Limit content width for better readability on large screens */
-    margin-left: auto; /* Center the content */
-    margin-right: auto; /* Center the content */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    line-height: 1.6;
+    font-size: 16px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+.header-container {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.main-logo {
+    max-width: 200px; /* Adjust as needed */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #555;
+    margin-top: 0;
+    padding: 0 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.4;
 }
 
 .container {
@@ -30,7 +44,7 @@ body {
 }
 
 h1 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: green;
 }
 
@@ -41,6 +55,32 @@ h1 {
     box-sizing: border-box;
 }
 
+/* Footer section */
+.footer-section {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+}
+
+.author-info {
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.footer-logos {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-logo {
+    max-width: 100px; /* Adjust as needed */
+    height: auto;
+    margin: 10px;
+}
+
+/* Existing carousel and other classes remain as is */
 .carousel {
     margin: 0 auto;
     width: 100%;
@@ -49,7 +89,7 @@ h1 {
 .carousel-item {
     position: relative;
     box-sizing: border-box;
-    width: 100%; /* Ensure each item takes full width of the carousel */
+    width: 100%;
 }
 
 .carousel-image-wrapper {
@@ -58,12 +98,12 @@ h1 {
 }
 
 .carousel-image {
-    width: 100%; /* Make sure the image scales with the container width */
-    height: 550px; /* Fixed height for the image */
-    object-fit: cover; /* Maintain aspect ratio and cover the container */
+    width: 100%;
+    height: 550px;
+    object-fit: cover;
     display: block;
-    margin-left: auto; /* Center the image horizontally */
-    margin-right: auto; /* Center the image horizontally */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .carousel-title {
@@ -83,7 +123,6 @@ p {
     margin-top: 10px;
 }
 
-/* Carousel navigation button styles */
 .slick-prev, .slick-next {
     background-color: #007bff;
     border-radius: 50%;
@@ -115,6 +154,7 @@ p {
     background-color: #f0f0f0;
     padding: 10px;
 }
+
 .right-align {
     text-align: right;
     background-color: #e0e0e0;

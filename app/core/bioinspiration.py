@@ -9,9 +9,9 @@
 """
 
 #categorize --> off-topic, Biology push, Technology pull
-from .utils import create_results, string_to_json
+from .utils import create_results, string_to_json, create_product_ideas
 from app.services.llm import assisted_chat, agent
-from app.services.mongodb import store_query, load_assistant
+from app.services.mongodb import store_query, load_assistant, store_result
 import time
 import uuid
 
@@ -110,11 +110,75 @@ def biomimetics_marketplace(query, model, client):
         print(concepts)
         yield {'type': 'progress', 'message': format_multiline(concepts)}
 
-
         # translate concepts
+        concept_translator = agent("ConceptTranslator1", model, client)
+        yield {'type': 'progress', 'message': concept_translator.process_prompt}
+        input_string = 'Query: ' + condensed_query + '\nConcept List ' + concepts
+        translated_concepts = concept_translator.chat_and_safe(input_string, query_id, 3)
+        print(translated_concepts)
+        yield {'type': 'progress', 'message': format_multiline(translated_concepts)}
+
         # get role models
-        pass
+        concept_rolemodels = agent("RoleModelsConcepts1", model, client)
+        yield {'type': 'progress', 'message': concept_rolemodels.process_prompt}
+        input_string = 'Query: ' + condensed_query + '\nBiological concepts: ' + translated_concepts
+        concept_rolemodel_lst = concept_rolemodels.chat_and_safe(input_string, query_id, 4)
+        print(concept_rolemodel_lst)
+        yield {'type': 'progress', 'message': format_multiline(concept_rolemodel_lst)}
+
+        # to json
+        json_agent = agent("ToJson1", model, client)
+        yield {'type': 'progress', 'message': json_agent.process_prompt}
+        input_string = 'Query: ' + condensed_query + '\nBiological concepts and Role models: ' + concept_rolemodel_lst
+        js = json_agent.chat_and_safe(concept_rolemodel_lst, query_id, 5)
+        print(js)
+        print(type(js))
+        yield {'type': 'progress', 'message': format_multiline(js)}
+
+        # Convert the final output to results
+        sp_js = string_to_json(js)
+        yield {'type': 'progress', 'message': 'Add some pictures...'}
+        results = create_results(sp_js, client)
+        db_query_id = store_result(query, model, query_id, results)
+        print(results)
+        yield {'type': 'results', 'data': results, 'query_id': db_query_id}
+
     elif "Biology" in categorie: 
-        pass
+        # mindmap
+        describer = agent("PhenomenonDescription", model, client)
+        yield {'type': 'progress', 'message': describer.process_prompt}
+        description = describer.chat_and_safe(query, query_id, 1)
+        print(description)
+        yield {'type': 'progress', 'message': format_multiline(description)}
+
+        # mindmap
+        mindmapper = agent("ProductMindMapper", model, client)
+        yield {'type': 'progress', 'message': mindmapper.process_prompt}
+        mindmap = mindmapper.chat_and_safe(description, query_id, 2)
+        print(mindmap)
+        yield {'type': 'progress', 'message': format_multiline(mindmap)}
+
+        # scamper
+        scamper_agent = agent("ScamperAgent1", model, client)
+        yield {'type': 'progress', 'message': scamper_agent.process_prompt}
+        ideas = scamper_agent.chat_and_safe(query + '\n'+ mindmap, query_id, 3)
+        print(ideas)
+        yield {'type': 'progress', 'message': format_multiline(ideas)}
+
+        # to json
+        tojson = agent("ScamperToJson1", model, client)
+        yield {'type': 'progress', 'message': tojson.process_prompt}
+        js = tojson.chat_and_safe(ideas, query_id, 4)
+        print(js)
+        yield {'type': 'progress', 'message': format_multiline(js)}
+
+        # Convert the final output to results
+        sp_js = string_to_json(js)
+        yield {'type': 'progress', 'message': 'Add pictures...'}
+        results = create_product_ideas(sp_js, client)
+        db_query_id = store_result(query, model, query_id, results)
+        print(results)
+        yield {'type': 'results', 'data': results, 'query_id': db_query_id}
+
     else: 
         pass

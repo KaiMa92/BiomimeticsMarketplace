@@ -10,8 +10,8 @@ $(document).ready(function () {
             if (data.error) {
                 $('#no-results-message').show();
             } else {
-                if (data.results && data.results.length > 0) {
-                    renderResults(data.results);  // Render the actual results
+                if (data.result && data.result.length > 0) {
+                    renderResults(data.result);  // Render the actual results
                     // Initialize the carousel after loading results
                     $('#results-carousel').slick();
                 } else {

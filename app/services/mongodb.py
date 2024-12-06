@@ -56,10 +56,22 @@ def store_query(query, model, query_id, query_counter, result):
     result = chat_collection.insert_one(query_dct)
     return result.inserted_id
 
+def store_result(query, model, query_id, result):
+    db = get_db()
+    chat_collection = db.chats
+    query_dct = {'query': query,
+                 'model': model, 
+                 'query_id': query_id,
+                 'query_counter': 'result',
+                 'result': result}
+    result = chat_collection.insert_one(query_dct)
+    return result.inserted_id
+
 def load_query(query_id):
     db = get_db()
     chat_collection = db.chats
     query = chat_collection.find_one({'_id': ObjectId(query_id)})
+    print(query)
     query['_id'] = str(query['_id'])
     return query
 

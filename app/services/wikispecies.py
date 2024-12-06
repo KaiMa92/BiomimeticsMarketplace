@@ -9,6 +9,7 @@ import requests
 from PIL import Image
 from io import BytesIO
 import wikipediaapi
+import requests
 
 def get_wikispecies_images(species_name):
     # Prepare the API request URL for the MediaWiki API
@@ -122,3 +123,55 @@ def get_image(species_name):
 # image_url = "https://upload.wikimedia.org/wikipedia/commons/4/4b/Africat_Cheetah.jpg"
 # display_image_from_url(image_url)
 # =============================================================================
+
+def fetch_first_image_url(search_term):
+    # Wikimedia Commons API endpoint
+    search_url = "https://commons.wikimedia.org/w/api.php"
+    
+    # Step 1: Search for the term in the File namespace (images)
+    search_params = {
+        "action": "query",
+        "list": "search",
+        "srsearch": search_term,
+        "format": "json",
+        "srlimit": 1,      # Limit to 1 result
+        "srnamespace": 6   # Search only in the File namespace
+    }
+    response = requests.get(search_url, params=search_params)
+    
+    # Handle response errors
+    if response.status_code != 200:
+        raise Exception(f"Error: Failed to fetch search results (HTTP {response.status_code})")
+    
+    search_results = response.json()
+    
+    # Check if any results were found
+    if not search_results.get('query', {}).get('search'):
+        return "No results found."
+    
+    # Extract the title of the first search result
+    first_title = search_results['query']['search'][0]['title']
+    
+    # Step 2: Fetch image information for the first result
+    image_params = {
+        "action": "query",
+        "titles": first_title,
+        "prop": "imageinfo",
+        "iiprop": "url",
+        "format": "json"
+    }
+    image_response = requests.get(search_url, params=image_params)
+    
+    # Handle response errors
+    if image_response.status_code != 200:
+        raise Exception(f"Error: Failed to fetch image details (HTTP {image_response.status_code})")
+    
+    image_details = image_response.json()
+    
+    # Extract the image URL
+    pages = image_details.get('query', {}).get('pages', {})
+    for page_id, page_data in pages.items():
+        if "imageinfo" in page_data:
+            return page_data['imageinfo'][0]['url']
+    
+    return "No image URL found."
