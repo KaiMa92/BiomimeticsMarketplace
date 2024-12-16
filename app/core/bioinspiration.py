@@ -86,29 +86,44 @@ def format_multiline(text):
     formatted_data = text.replace('\n', '<br>')
     return formatted_data
 
+def run_agent_step(agent_name, model, client, input_text, query_id, step_number, formatter=None):
+    """Run a single agent step and yield progress and results."""
+    # Create the agent
+    step_agent = agent(agent_name, model, client)
+
+    # Yield the process_prompt message
+    yield {'type': 'progress', 'message': step_agent.process_prompt}
+
+    # Run chat_and_safe
+    result = step_agent.chat_and_safe(input_text, query_id, step_number)
+
+    # Yield the formatted result
+    yield {'type': 'progress', 'message': result_msg}
+
+    return result  # Also return the raw result if needed for further steps
+
 def biomimetics_marketplace(query, model, client): 
 
     query_id = str(uuid.uuid4())
-    categorizer = agent('Categorize1', model, client)
-
     
+    categorizer = agent('Categorize1', model, client)
     yield {'type': 'progress', 'message': categorizer.process_prompt}
     categorie = categorizer.chat_and_safe(query, query_id, 0)
-    yield {'type': 'progress', 'message': categorie}
+    #yield {'type': 'progress', 'message': categorie}
 
     if "Engineering" in categorie: 
         #Condense input
         condenser = agent('QueryCondenser1', model, client)
         yield {'type': 'progress', 'message': condenser.process_prompt}
         condensed_query = condenser.chat_and_safe(query, query_id, 1)
-        yield {'type': 'progress', 'message': condensed_query}
+        #yield {'type': 'progress', 'message': condensed_query}
 
         #Brainstorm concepts
         brainstormer = agent("ConceptSuggestor1", model, client)
         yield {'type': 'progress', 'message': brainstormer.process_prompt}
         concepts = brainstormer.chat_and_safe(condensed_query, query_id, 2)
         print(concepts)
-        yield {'type': 'progress', 'message': format_multiline(concepts)}
+        #yield {'type': 'progress', 'message': format_multiline(concepts)}
 
         # translate concepts
         #concept_translator = agent("ConceptTranslator1", model, client)
@@ -124,7 +139,7 @@ def biomimetics_marketplace(query, model, client):
         input_string = 'Query: ' + condensed_query + '\nBiological concepts: ' + concepts
         concept_rolemodel_lst = concept_rolemodels.chat_and_safe(input_string, query_id, 4)
         print(concept_rolemodel_lst)
-        yield {'type': 'progress', 'message': format_multiline(concept_rolemodel_lst)}
+        #yield {'type': 'progress', 'message': format_multiline(concept_rolemodel_lst)}
 
         # to json
         json_agent = agent("ToJson1", model, client)
@@ -133,7 +148,7 @@ def biomimetics_marketplace(query, model, client):
         js = json_agent.chat_and_safe(concept_rolemodel_lst, query_id, 5)
         print(js)
         print(type(js))
-        yield {'type': 'progress', 'message': format_multiline(js)}
+        #yield {'type': 'progress', 'message': format_multiline(js)}
 
         # Convert the final output to results
         sp_js = string_to_json(js)
@@ -141,7 +156,7 @@ def biomimetics_marketplace(query, model, client):
         results = create_results(sp_js, client)
         db_query_id = store_result(query, model, query_id, results)
         print(results)
-        yield {'type': 'results', 'data': results, 'query_id': db_query_id}
+        #yield {'type': 'results', 'data': results, 'query_id': db_query_id}
 
     elif "Biology" in categorie: 
         # mindmap
@@ -149,28 +164,28 @@ def biomimetics_marketplace(query, model, client):
         yield {'type': 'progress', 'message': describer.process_prompt}
         description = describer.chat_and_safe(query, query_id, 1)
         print(description)
-        yield {'type': 'progress', 'message': format_multiline(description)}
+        #yield {'type': 'progress', 'message': format_multiline(description)}
 
         # mindmap
         mindmapper = agent("ProductMindMapper", model, client)
         yield {'type': 'progress', 'message': mindmapper.process_prompt}
         mindmap = mindmapper.chat_and_safe(description, query_id, 2)
         print(mindmap)
-        yield {'type': 'progress', 'message': format_multiline(mindmap)}
+        #yield {'type': 'progress', 'message': format_multiline(mindmap)}
 
         # scamper
         scamper_agent = agent("ScamperAgent1", model, client)
         yield {'type': 'progress', 'message': scamper_agent.process_prompt}
         ideas = scamper_agent.chat_and_safe(query + '\n'+ mindmap, query_id, 3)
         print(ideas)
-        yield {'type': 'progress', 'message': format_multiline(ideas)}
+        #yield {'type': 'progress', 'message': format_multiline(ideas)}
 
         # to json
         tojson = agent("ScamperToJson1", model, client)
         yield {'type': 'progress', 'message': tojson.process_prompt}
         js = tojson.chat_and_safe(ideas, query_id, 4)
         print(js)
-        yield {'type': 'progress', 'message': format_multiline(js)}
+        #yield {'type': 'progress', 'message': format_multiline(js)}
 
         # Convert the final output to results
         sp_js = string_to_json(js)
@@ -178,7 +193,7 @@ def biomimetics_marketplace(query, model, client):
         results = create_product_ideas(sp_js, client)
         db_query_id = store_result(query, model, query_id, results)
         print(results)
-        yield {'type': 'results', 'data': results, 'query_id': db_query_id}
+        #yield {'type': 'results', 'data': results, 'query_id': db_query_id}
 
     else: 
         pass
