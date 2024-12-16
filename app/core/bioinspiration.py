@@ -156,7 +156,7 @@ def biomimetics_marketplace(query, model, client):
         results = create_results(sp_js, client)
         db_query_id = store_result(query, model, query_id, results)
         print(results)
-        #yield {'type': 'results', 'data': results, 'query_id': db_query_id}
+        yield {'type': 'results', 'data': results, 'query_id': db_query_id}
 
     elif "Biology" in categorie: 
         # mindmap
@@ -193,7 +193,7 @@ def biomimetics_marketplace(query, model, client):
         results = create_product_ideas(sp_js, client)
         db_query_id = store_result(query, model, query_id, results)
         print(results)
-        #yield {'type': 'results', 'data': results, 'query_id': db_query_id}
+        yield {'type': 'results', 'data': results, 'query_id': db_query_id}
 
     else: 
         pass

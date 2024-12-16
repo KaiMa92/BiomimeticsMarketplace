@@ -33,6 +33,13 @@ body {
     box-sizing: border-box;
 }
 
+.content-wrapper-results {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
 /* Header at the top */
 .header-container {
     text-align: center;
@@ -177,17 +184,74 @@ main {
     100% { transform: rotate(360deg); }
 }
 
-/* Additional styling if needed for debug */
-.left-align {
-    text-align: left;
-    background-color: #1f2130; 
-    padding: 10px;
-    color: #7ed957;
+/* Carousel and other existing classes remain unchanged if present */
+.carousel {
+    margin: 0 auto;
+    width: 100%;
 }
 
-.right-align {
-    text-align: right;
-    background-color: #1f2130;
+.carousel-item {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.carousel-image-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 550px;
+    max-width: 850px;
+    max-height: 550px;
+    object-fit: cover;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel-title {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
     padding: 10px;
-    color: #ffffff;
+    border-radius: 4px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.slick-prev, .slick-next {
+    background-color: #7ed957;
+    color: #1f2130;
+    font-size: 24px;
+    border-radius: 50%;
+    border: none;
+}
+
+.slick-prev:hover, .slick-next:hover {
+    background-color: #66c64c;
+}
+
+.like-button, .dislike-button {
+    background-color: #7ed957;
+    color: #1f2130;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 5px;
+}
+
+.dislike-button {
+    background-color: #66c64c;
 }
