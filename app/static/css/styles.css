@@ -1,46 +1,190 @@
-/* Existing styles */
-/* body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
-} */
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clean font */
-    background-color: #ffffff; /* White background for better contrast */
-    color: #333333; /* Dark gray text for better readability */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #1f2130; /* Dark background */
+    color: #ffffff; /* White text */
     margin: 0;
-    padding: 0;
-    line-height: 1.6; /* Improved line spacing for readability */
-    font-size: 16px; /* Set a comfortable base font size */
-    max-width: 1200px; /* Limit content width for better readability on large screens */
-    margin-left: auto; /* Center the content */
-    margin-right: auto; /* Center the content */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-}
-
-.container {
-    max-width: 500px;
-    margin: 50px auto;
-    background-color: #ffffff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-h1 {
-    margin-bottom: 20px;
-    color: green;
-}
-
-.search-input {
-    width: 100%;
-    padding: 10px;
+    line-height: 1.6;
     font-size: 16px;
+    max-width: 100%;
     box-sizing: border-box;
 }
 
+/* The content-wrapper takes all available space, and we distribute space so that 
+   header is at top, main in the middle, and author-info + footer at the bottom. */
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Center content with constraints */
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px; /* Padding around overall content */
+    box-sizing: border-box;
+}
+
+.content-wrapper-results {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+/* Header at the top */
+.header-container {
+    text-align: center;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+.main-logo {
+    width: 500px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #ffffff;
+    line-height: 1.4;
+    text-align: center;
+    margin: 0 auto 40px auto;
+}
+
+/* main stretches to fill space between header and author-info/footer */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Search form at the top of main (no grow) */
+.search-form {
+    max-width: 720px;
+    margin: 0 auto 20px auto; /* some space below form to separate from progress */
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.search-input {
+    background: transparent;
+    border: 2px solid #7ed957;
+    color: #ffffff;
+    padding: 10px;
+    font-size: 16px;
+    width: 600px;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.search-input::placeholder {
+    color: #cccccc;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #7ed957;
+}
+
+.techy-button {
+    background: #7ed957;
+    color: #1f2130;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: box-shadow 0.2s ease-in-out;
+    margin-left: 10px;
+}
+
+.techy-button:hover {
+    box-shadow: 0 0 10px #7ed957;
+}
+
+/* Progress container takes up remaining space in main and centers contents */
+#progress-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center spinner and text both horizontally and vertically */
+    background: none; /* Transparent background */
+}
+
+/* Spinner styles */
+#progress-circle {
+    width: 50px;
+    height: 50px;
+    border: 8px solid #ccc;
+    border-top: 8px solid #7ed957;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+#progress-text {
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Author info above the footer */
+.author-info {
+    font-style: italic;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 0; /* Keep it tight above the footer */
+    flex-shrink: 0;
+}
+
+/* Footer at the very bottom */
+.footer-section {
+    background-color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    flex-shrink: 0;
+}
+
+.footer-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 83px;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+.footer-logo {
+    max-height: 60px;
+    width: auto;
+    max-width: 180px;
+    height: auto;
+    margin: 0;
+}
+
+/* Keyframe for spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Carousel and other existing classes remain unchanged if present */
 .carousel {
     margin: 0 auto;
     width: 100%;
@@ -49,7 +193,7 @@ h1 {
 .carousel-item {
     position: relative;
     box-sizing: border-box;
-    width: 100%; /* Ensure each item takes full width of the carousel */
+    width: 100%;
 }
 
 .carousel-image-wrapper {
@@ -58,12 +202,14 @@ h1 {
 }
 
 .carousel-image {
-    width: 100%; /* Make sure the image scales with the container width */
-    height: 550px; /* Fixed height for the image */
-    object-fit: cover; /* Maintain aspect ratio and cover the container */
+    width: 100%;
+    height: 550px;
+    max-width: 850px;
+    max-height: 550px;
+    object-fit: cover;
     display: block;
-    margin-left: auto; /* Center the image horizontally */
-    margin-right: auto; /* Center the image horizontally */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .carousel-title {
@@ -83,21 +229,21 @@ p {
     margin-top: 10px;
 }
 
-/* Carousel navigation button styles */
 .slick-prev, .slick-next {
-    background-color: #007bff;
-    border-radius: 50%;
-    color: white;
+    background-color: #7ed957;
+    color: #1f2130;
     font-size: 24px;
+    border-radius: 50%;
+    border: none;
 }
 
 .slick-prev:hover, .slick-next:hover {
-    background-color: #0056b3;
+    background-color: #66c64c;
 }
 
 .like-button, .dislike-button {
-    background-color: #007bff;
-    color: white;
+    background-color: #7ed957;
+    color: #1f2130;
     border: none;
     padding: 10px 20px;
     margin: 5px;
@@ -107,5 +253,5 @@ p {
 }
 
 .dislike-button {
-    background-color: #dc3545;
+    background-color: #66c64c;
 }

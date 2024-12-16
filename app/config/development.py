@@ -16,7 +16,7 @@ class DevelopmentConfig(Config):
     DEBUG = True  # Enable debug mode for development
     
     # Optionally override database name or other settings
-    MONGO_DB_NAME = "conversationDB"
+    MONGO_DB_NAME = "Development"
 
     # Add other development-specific configurations if needed
 

@@ -10,7 +10,7 @@
 
 from flask import Blueprint, render_template, request, current_app, jsonify, session, Response, stream_with_context
 from app.services.mongodb import store_likes, load_query, store_query
-from app.core.bioinspiration import bioinspire, test
+from app.core.bioinspiration import bioinspire, biomimetics_marketplace
 import uuid
 import json
 
@@ -31,7 +31,9 @@ def start():
         return "Query cannot be empty.", 400
 
     def generate():
-        for output in test(query):
+        client = current_app.openai_client
+        model = 'gpt-4o'#-mini' 
+        for output in biomimetics_marketplace(query,model,client):
             if output['type'] == 'progress':
                 yield f"data: {output['message']}\n\n"
             elif output['type'] == 'results':
@@ -58,9 +60,9 @@ def results():
 @main.route('/api/results/<query_id>')
 def api_results(query_id):
     result_doc = load_query(query_id)
-    if not result_doc or 'results' not in result_doc:
+    if not result_doc or 'result' not in result_doc:
         return jsonify({'error': 'No results found'}), 404
-    return jsonify({'results': result_doc['results']})
+    return jsonify({'result': result_doc['result']})
 
 
 # @main.route('/api/results/<query_id>')

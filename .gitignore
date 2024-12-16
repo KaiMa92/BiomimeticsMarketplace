@@ -13,6 +13,9 @@ biomarket
 # Examples
 examples
 
+# Images
+app\static\images
+
 # Datasets
 datasets
 
