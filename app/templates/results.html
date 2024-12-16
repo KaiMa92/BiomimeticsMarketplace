@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+    <div class="content-wrapper">
     <div class="container">
         <!-- Placeholder for dynamically loaded content -->
         <div class="carousel" id="results-carousel">
@@ -33,5 +34,6 @@
     <script>
         const queryId = "{{ query_id }}";  // Pass the query ID from Flask to JavaScript
     </script>
+    </div>
 </body>
 </html>

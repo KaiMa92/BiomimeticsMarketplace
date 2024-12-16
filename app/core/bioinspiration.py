@@ -111,17 +111,17 @@ def biomimetics_marketplace(query, model, client):
         yield {'type': 'progress', 'message': format_multiline(concepts)}
 
         # translate concepts
-        concept_translator = agent("ConceptTranslator1", model, client)
-        yield {'type': 'progress', 'message': concept_translator.process_prompt}
-        input_string = 'Query: ' + condensed_query + '\nConcept List ' + concepts
-        translated_concepts = concept_translator.chat_and_safe(input_string, query_id, 3)
-        print(translated_concepts)
-        yield {'type': 'progress', 'message': format_multiline(translated_concepts)}
+        #concept_translator = agent("ConceptTranslator1", model, client)
+        #yield {'type': 'progress', 'message': concept_translator.process_prompt}
+        #input_string = 'Query: ' + condensed_query + '\nConcept List ' + concepts
+        #translated_concepts = concept_translator.chat_and_safe(input_string, query_id, 3)
+        #print(translated_concepts)
+        #yield {'type': 'progress', 'message': format_multiline(translated_concepts)}
 
         # get role models
         concept_rolemodels = agent("RoleModelsConcepts1", model, client)
         yield {'type': 'progress', 'message': concept_rolemodels.process_prompt}
-        input_string = 'Query: ' + condensed_query + '\nBiological concepts: ' + translated_concepts
+        input_string = 'Query: ' + condensed_query + '\nBiological concepts: ' + concepts
         concept_rolemodel_lst = concept_rolemodels.chat_and_safe(input_string, query_id, 4)
         print(concept_rolemodel_lst)
         yield {'type': 'progress', 'message': format_multiline(concept_rolemodel_lst)}
