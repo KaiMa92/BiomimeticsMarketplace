@@ -1,26 +1,43 @@
-body {
-    background-color: #1f2130; /* Dark background */
-    color: #ffffff; /* White text */
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
-    line-height: 1.6;
-    font-size: 16px;
-    max-width: 100%;
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Common wrapper to ensure consistent width */
-.content-wrapper {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px;
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #1f2130; /* Dark background */
+    color: #ffffff; /* White text */
+    margin: 0;
+    line-height: 1.6;
+    font-size: 16px;
+    max-width: 100%;
     box-sizing: border-box;
 }
 
+/* The content-wrapper takes all available space, and we distribute space so that 
+   header is at top, main in the middle, and author-info + footer at the bottom. */
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Center content with constraints */
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px; /* Padding around overall content */
+    box-sizing: border-box;
+}
+
+/* Header at the top */
 .header-container {
     text-align: center;
     margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .main-logo {
@@ -37,11 +54,20 @@ body {
     margin: 0 auto 40px auto;
 }
 
-/* Search form centered within the same width */
+/* main stretches to fill space between header and author-info/footer */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Search form at the top of main (no grow) */
 .search-form {
     max-width: 720px;
-    margin: 0 auto; /* ensures centering */
+    margin: 0 auto 20px auto; /* some space below form to separate from progress */
+    display: flex;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .search-input {
@@ -50,7 +76,7 @@ body {
     color: #ffffff;
     padding: 10px;
     font-size: 16px;
-    width: 600px; /* Wider input field */
+    width: 600px;
     box-sizing: border-box;
     border-radius: 4px;
 }
@@ -64,10 +90,9 @@ body {
     border-color: #7ed957;
 }
 
-/* Techy style for the button */
 .techy-button {
     background: #7ed957;
-    color: #1f2130; /* Text dark if background is #7ed957 */
+    color: #1f2130;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
@@ -76,30 +101,57 @@ body {
     font-weight: bold;
     border-radius: 4px;
     transition: box-shadow 0.2s ease-in-out;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-left: 10px;
 }
 
 .techy-button:hover {
     box-shadow: 0 0 10px #7ed957;
 }
 
-.spacer {
-    height: 350px; /* Ensures enough space to push content down */
+/* Progress container takes up remaining space in main and centers contents */
+#progress-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center spinner and text both horizontally and vertically */
+    background: none; /* Transparent background */
 }
 
-/* Author info line in dark style area */
-.author-info {
+/* Spinner styles */
+#progress-circle {
+    width: 50px;
+    height: 50px;
+    border: 8px solid #ccc;
+    border-top: 8px solid #7ed957;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+#progress-text {
+    font-size: 16px;
+    font-weight: 400;
     font-style: italic;
-    margin-bottom: 40px;
     text-align: center;
     color: #ffffff;
 }
 
-/* Logos in a tight white box */
+/* Author info above the footer */
+.author-info {
+    font-style: italic;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 0; /* Keep it tight above the footer */
+    flex-shrink: 0;
+}
+
+/* Footer at the very bottom */
 .footer-section {
     background-color: #ffffff;
     text-align: center;
-    padding: 10px; /* very tight padding */
+    padding: 10px;
+    flex-shrink: 0;
 }
 
 .footer-logos {
@@ -116,79 +168,16 @@ body {
     width: auto;
     max-width: 180px;
     height: auto;
-    margin: 0; /* Remove extra margin to keep it tight */
+    margin: 0;
 }
 
-/* Carousel and other existing classes remain unchanged if present */
-.carousel {
-    margin: 0 auto;
-    width: 100%;
+/* Keyframe for spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.carousel-item {
-    position: relative;
-    box-sizing: border-box;
-    width: 100%;
-}
-
-.carousel-image-wrapper {
-    position: relative;
-    width: 100%;
-}
-
-.carousel-image {
-    max-width: 850px;
-    max-height: 550px;
-    object-fit: cover;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.carousel-title {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-p {
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-.slick-prev, .slick-next {
-    background-color: #7ed957;
-    color: #1f2130;
-    font-size: 24px;
-    border-radius: 50%;
-    border: none;
-}
-
-.slick-prev:hover, .slick-next:hover {
-    background-color: #66c64c;
-}
-
-.like-button, .dislike-button {
-    background-color: #7ed957;
-    color: #1f2130;
-    border: none;
-    padding: 10px 20px;
-    margin: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    border-radius: 5px;
-}
-
-.dislike-button {
-    background-color: #66c64c;
-}
-
+/* Additional styling if needed for debug */
 .left-align {
     text-align: left;
     background-color: #1f2130; 
@@ -202,33 +191,3 @@ p {
     padding: 10px;
     color: #ffffff;
 }
-
-#progress-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-#progress-circle {
-    width: 50px;
-    height: 50px;
-    border: 8px solid #ccc;
-    border-top: 8px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 10px;
-}
-
-#progress-text {
-    font-size: 16px;
-    font-weight: 400;
-    text-align: center;
-    color: #333;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
