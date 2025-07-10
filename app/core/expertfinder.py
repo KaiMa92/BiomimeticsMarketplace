@@ -152,8 +152,21 @@ def find_experts(sim, query_text, explain_agent, summary_agent, location_filter,
     id_mapping_df["citation"] = id_mapping_df.apply(lambda row: format_ieee_citation(retrieve_df,row["node_id"], row["reference"]), axis=1)
     df_top["explanation"] = df_top["nodes"].apply(lambda node_id_lst: explain_all_nodes(sim, node_id_lst, query_text, explain_agent, id_mapping_df))
     df_top["summary"] = df_top.apply(lambda row: summarize_nodes(sim, query_text, summary_agent, row["explanation"], row["author_name"]), axis=1)
+    df_top['affiliations'] = df_top['affiliations'].str[0]
     
-    dct = {'Query': }
+    records = (
+        df_top
+        .sort_values("ranking")
+        .loc[:, ["author_name", "summary", "affiliations"]]
+        .to_dict(orient="records")
+    )
+    
+    dct = {'Query': query_text, 
+           'Location': location_filter, 
+           'Authors': records, 
+           'Sources': list(id_mapping_df['citation'])}
+    
+    return dct
 
 
 def find_bio_experts(bio_sim, query_text, location_filter = 'Frankfurt', top = 5):
@@ -190,7 +203,7 @@ def find_bio_experts(bio_sim, query_text, location_filter = 'Frankfurt', top = 5
     tailored to materials and composite scientists of how the content of the document can 
     contribute to solving the problem described in the query. Be very concise, formal tone, 
     scientific language, american english. Only return blank text without headline or any special formattings'''
-    find_experts(bio_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
+    return find_experts(bio_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
     
 def find_eng_experts(eng_sim, query_text, location_filter = 'Kaiserslautern', top = 5):
     summary_agent = '''
@@ -237,4 +250,4 @@ def find_eng_experts(eng_sim, query_text, location_filter = 'Kaiserslautern', to
     biological phenomenon described in the query. Be very concise, formal tone, 
     scientific language, american english. Only return blank text without headline or any special formattings'''
     
-    find_experts(eng_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
+    return find_experts(eng_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
