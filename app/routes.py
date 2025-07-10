@@ -64,28 +64,3 @@ def api_results(query_id):
         return jsonify({'error': 'No results found'}), 404
     return jsonify({'result': result_doc['result']})
 
-
-# @main.route('/api/results/<query_id>')
-# def api_results(query_id):
-#     result_doc = load_query(query_id)
-#     if not result_doc or 'results' not in result_doc:
-#         return jsonify({'error': 'No results found'}), 404
-#     return jsonify({'results': result_doc['results']})
-
-# # API endpoint to retrieve results as JSON
-# @main.route('/api/results/<query_id>')
-# def api_results(query_id):
-#     result_doc = collection.find_one({'session_id': query_id})
-#     if not result_doc or 'results' not in result_doc:
-#         return jsonify({'error': 'No results found'}), 404
-#     return jsonify(result_doc['results'])
-
-# def get_results():
-#     # Load results from the database
-#     query = load_query(query_id)
-    
-#     if not query:
-#         return jsonify({"error": "No results found for the given query ID."}), 404
-
-#     return jsonify(query)
-

@@ -9,6 +9,8 @@
 """
 
 #categorize --> off-topic, Biology push, Technology pull
+from ragpipeline.load_models import load_gwdg_llm, load_gwdg_apikey, load_gwdg_embedding
+
 from .utils import create_results, string_to_json, create_product_ideas
 from app.services.llm import assisted_chat, agent
 from app.services.mongodb import store_query, load_assistant, store_result
@@ -104,6 +106,13 @@ def run_agent_step(agent_name, model, client, input_text, query_id, step_number,
 
 def biomimetics_marketplace(query, model, client): 
 
+    
+    #categorize
+    #enhance
+    #search
+    #rank experts
+    #describe experts
+    
     query_id = str(uuid.uuid4())
     
     categorizer = agent('Categorize1', model, client)
