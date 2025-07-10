@@ -9,12 +9,10 @@
 """
 
 #categorize --> off-topic, Biology push, Technology pull
-from ragpipeline.load_models import load_gwdg_llm, load_gwdg_apikey, load_gwdg_embedding
 
 from .utils import create_results, string_to_json, create_product_ideas
 from app.services.llm import assisted_chat, agent
 from app.services.mongodb import store_query, load_assistant, store_result
-import time
 import uuid
 
 def bioinspire(query, model, client, steps_config):
