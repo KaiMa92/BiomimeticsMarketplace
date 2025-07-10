@@ -7,8 +7,7 @@ Created on Wed Feb 26 14:49:27 2025
 
 import pandas as pd
 
-
-def add_frankfurt_authors_column(df):
+def filter_by_keyword(df, filter_keyword):
     # Initialize an empty list to store the Frankfurt authors for each row
     frankfurt_authors_column = []
 
@@ -19,7 +18,7 @@ def add_frankfurt_authors_column(df):
         authors_fullname_lst = row['Author full names'].split(';')
 
         # List comprehension to find the indices of Frankfurt authors
-        frankfurt_authors_idx = [i for i, awa in enumerate(awa) if 'Frankfurt' in awa]
+        frankfurt_authors_idx = [i for i, awa in enumerate(awa) if filter_keyword in awa]
 
         # Create the Frankfurt authors list using indices
         frankfurt_authors = [authors_fullname_lst[n] for n in frankfurt_authors_idx]
@@ -28,31 +27,7 @@ def add_frankfurt_authors_column(df):
         frankfurt_authors_column.append('; '.join(frankfurt_authors))
 
     # Add the Frankfurt authors as a new column in the dataframe
-    df['Frankfurt authors'] = frankfurt_authors_column
-
-    return df
-
-def add_senckenberg_authors_column(df):
-    # Initialize an empty list to store the Frankfurt authors for each row
-    frankfurt_authors_column = []
-
-    # Loop through each row of the dataframe
-    for index, row in df.iterrows():
-        # Extract the affiliations and full names for the current row
-        awa = row['Authors with affiliations'].split(';')
-        authors_fullname_lst = row['Author full names'].split(';')
-
-        # List comprehension to find the indices of Frankfurt authors
-        frankfurt_authors_idx = [i for i, awa in enumerate(awa) if 'Senckenberg' in awa]
-
-        # Create the Frankfurt authors list using indices
-        frankfurt_authors = [authors_fullname_lst[n] for n in frankfurt_authors_idx]
-
-        # Join the Frankfurt authors into a single string and append to the list
-        frankfurt_authors_column.append('; '.join(frankfurt_authors))
-
-    # Add the Frankfurt authors as a new column in the dataframe
-    df['Senckenberg authors'] = frankfurt_authors_column
+    df['filtered_column'] = frankfurt_authors_column
 
     return df
 
@@ -134,7 +109,7 @@ def summarize_nodes(sim, query_text, node_explanations, author_name):
     Your ultimate goal is to produce a concise, authoritative, and well-structured review of the authors expertise to contribute solving the given query. 
     '''
     query_text = "Query: "+ query_text +'\nAuthor: ' + author_name+ '\nText: '+"\n".join(node_explanations)
-    summary = sim.llm.complete(summarize_agent + '\n' + query_text)
+    summary = sim.llm.chat(summarize_agent + '\n' + query_text)
     return summary
 
 
@@ -164,55 +139,21 @@ def report_string(query, df_top, id_mapping_df):
 def save_html(string, path): 
     with open(path, "w", encoding= "utf-8") as html_file:
         html_file.write(string)
-        
- 
-def find_frankfurt_experts(sim, query, path, top = 3):   
-    print(query)     
-    print('retrieve')
-    df = sim.retrieve(query)
-    print('process')
-    #df_new = add_frankfurt_authors_column(df)
-    #ars = author_ranking(df_new, 'Frankfurt authors')
-    ars = author_ranking(df, 'Authors with affiliations')
-    df_top = ars.head(top)
+
+
+def find_experts(sim, query_text, agent_text, filter_keyword, top = 3): 
+    retrieve_df = sim.retrieve
+    filtered_df = filter_by_keyword(retrieve_df, filter_keyword)
+    ranked_authors_df = author_ranking(filtered_df, 'filtered_column')    
+    df_top = ranked_authors_df.head(top)
     df_top["author_name"] = df_top.index.str.replace(r"\s\([^)]*\)", "", regex=True)
     unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
     id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
-    id_mapping_df["citation"] = id_mapping_df.apply(lambda row: format_ieee_citation(df,row["node_id"], row["reference"]), axis=1)
-    df_top["explanation"] = df_top["nodes"].apply(lambda node_id_lst: explain_all_nodes(sim, node_id_lst, query, id_mapping_df))
-    df_top["summary"] = df_top.apply(lambda row: summarize_nodes(sim, query, row["explanation"], row["author_name"]), axis=1)
+    id_mapping_df["citation"] = id_mapping_df.apply(lambda row: format_ieee_citation(retrieve_df,row["node_id"], row["reference"]), axis=1)
+    df_top["explanation"] = df_top["nodes"].apply(lambda node_id_lst: explain_all_nodes(sim, node_id_lst, query_text, agent_text, id_mapping_df))
+    df_top["summary"] = df_top.apply(lambda row: summarize_nodes(sim, query_text, row["explanation"], row["author_name"]), axis=1)
+    
     report = report_string(query, df_top, id_mapping_df)
     print('save')
     save_html(report, path)
     
-def find_senckenberg_experts(sim, query, path, top = 3):   
-    print(query)     
-    print('retrieve')
-    df = sim.retrieve(query)
-    print('process')
-# =============================================================================
-#     df_new = add_frankfurt_authors_column(df)
-#     ars = author_ranking(df_new, 'Frankfurt authors')
-# =============================================================================
-    df_new = add_senckenberg_authors_column(df)
-    ars = author_ranking(df_new, 'Senckenberg authors')
-# =============================================================================
-#     ars = author_ranking(df, 'Authors with affiliations')
-# =============================================================================
-    df_top = ars.head(top)
-    df_top["author_name"] = df_top.index.str.replace(r"\s\([^)]*\)", "", regex=True)
-    unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
-    id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
-    id_mapping_df["citation"] = id_mapping_df.apply(lambda row: format_ieee_citation(df,row["node_id"], row["reference"]), axis=1)
-    df_top["explanation"] = df_top["nodes"].apply(lambda node_id_lst: explain_all_nodes(sim, node_id_lst, query, id_mapping_df))
-    df_top["summary"] = df_top.apply(lambda row: summarize_nodes(sim, query, row["explanation"], row["author_name"]), axis=1)
-    report = report_string(query, df_top, id_mapping_df)
-    print('save')
-    save_html(report, path)
-
-
-
-
-
-
-
