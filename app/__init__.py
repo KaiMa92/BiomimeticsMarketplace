@@ -19,12 +19,12 @@ def create_app():
     app.config.from_object(Config)  # Load config from Config class
     app.secret_key = 'your_secret_key'
     
-    gwdg_api_key = 
+    gwdg_api_key = app.config["GWDG_API_KEY"]
     
     app.llm = load_gwdg_llm('mistral-large-instruct', api_key= gwdg_api_key)
     app.embedding = load_gwdg_embedding()
-    app.bio_sim = ScopusIndexManager()
-    app.eng_sim = ScopusIndexManager()
+    app.bio_sim = ScopusIndexManager(llm = app.llm, embedding_model = app.embedding, index_path = '/datasets/senckenberg/index')
+    app.eng_sim = ScopusIndexManager(llm = app.llm, embedding_model = app.embedding, index_path = '/datasets/livw/index')
     
     
     # Register Blueprints or other app components
