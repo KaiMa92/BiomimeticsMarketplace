@@ -113,7 +113,7 @@ def biomimetics_marketplace(query, model, client):
 
     if "Engineering" in categorie: 
         #Condense input
-        condenser = agent('QueryCondenser1', model, client)
+        condenser = agent('Query_enricher', model, client) #'QueryCondenser1'
         yield {'type': 'progress', 'message': condenser.process_prompt}
         condensed_query = condenser.chat_and_safe(query, query_id, 1)
         #yield {'type': 'progress', 'message': condensed_query}

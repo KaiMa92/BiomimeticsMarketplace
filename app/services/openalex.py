@@ -8,35 +8,39 @@ import requests
 
 base_url = "https://api.openalex.org/works"
 
-query_params = {
-    "search": "Scansorality",
-    # Title contains 'artificial intelligence'
-    "per-page": 10  # Limit results
-}
-
-response = requests.get(base_url, params=query_params)
-
-if response.status_code == 200:
-    data = response.json()
-    for work in data['results']:
-        print(f"Title: {work['title']}")
-        print(f"DOI: {work['doi']}")
-        print("-----------")
-else:
-    print(f"Error: {response.status_code} - {response.text}")
+# =============================================================================
+# query_params = {
+#     "search": "Scansorality",
+#     # Title contains 'artificial intelligence'
+#     "per-page": 10  # Limit results
+# }
+# 
+# response = requests.get(base_url, params=query_params)
+# 
+# if response.status_code == 200:
+#     data = response.json()
+#     for work in data['results']:
+#         print(f"Title: {work['title']}")
+#         print(f"DOI: {work['doi']}")
+#         print("-----------")
+# else:
+#     print(f"Error: {response.status_code} - {response.text}")
+# =============================================================================
     
     
 #These searches make use of stemming and stop-word removal    
 query_params = {
     #"filter": "title_and_abstract.search:vibration",
     "filter": "title_and_abstract.search:Shape%20Memory%20Alloy|Niti,title_and_abstract.search:Composite|hybrid,is_oa:true",
-    "per-page": 100  # Limit results
+    "per-page": 200  # Limit results
 }
 
 response = requests.get(base_url, params=query_params)
 data = response.json()
-for work in data['results']:
-    print(f"Title: {work['title']}")
+# =============================================================================
+# for work in data['results']:
+#     print(f"Title: {work['title']}")
+# =============================================================================
 
 
 def resolve_abstract(abstract_inverted_index):
@@ -63,7 +67,7 @@ def add_abstract(data):
 
 
 
-base_url = "https://api.openalex.org/works"
+#base_url = "https://api.openalex.org/works"
 
 # =============================================================================
 # query_params = {
@@ -86,14 +90,26 @@ base_url = "https://api.openalex.org/works"
     
     
 #These searches make use of stemming and stop-word removal    
-query_params = {
-    #"filter": "title_and_abstract.search:vibration",
-    "filter": "title_and_abstract.search:Shape%20Memory%20Alloy|Niti,title_and_abstract.search:Composite|hybrid,is_oa:true",
-    "per-page": 5  # Limit results
-}
+# =============================================================================
+# query_params = {
+#     #"filter": "title_and_abstract.search:vibration",
+#     "filter": "title_and_abstract.search:Shape%20Memory%20Alloy|Niti,title_and_abstract.search:Composite|hybrid,is_oa:true",
+#     "per-page": 5  # Limit results
+# }
+# =============================================================================
 
-response = requests.get(base_url, params=query_params)
-data = response.json()
+# =============================================================================
+# response = requests.get(base_url, params=query_params)
+# data = response.json()
+# =============================================================================
 data = add_abstract(data)
 #for work in data['results']:
 #    print(f"Title: {work['title']}")
+
+no_abstracts = 0
+for source in data['results']:
+    if len(source['abstract']) == 0: 
+        no_abstracts += 1
+no_abstracts_percentage = no_abstracts * 100 / len(data['results'])
+print(str(len(data['results'])) + ' documents found.')
+print(str(no_abstracts_percentage) + r' % has no abstract.')
