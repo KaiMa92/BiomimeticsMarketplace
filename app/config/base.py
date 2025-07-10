@@ -19,11 +19,6 @@ class Config:
     """Base configuration with common settings."""
     DEBUG = False
     TESTING = False
-    
-    # MongoDB Configuration
-    MONGO_HOST = os.getenv("MONGO_HOST", "localhost")
-    MONGO_PORT = int(os.getenv("MONGO_PORT", 27017))
-    MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "DB")
 
     # OpenAI Configuration
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
