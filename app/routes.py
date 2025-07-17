@@ -9,25 +9,13 @@
 """
 
 from flask import Blueprint, render_template, request, current_app, jsonify, session, Response, stream_with_context
-from app.services.mongodb import store_likes, load_query, store_query
-from app.core.bioinspiration import bioinspire, biomimetics_marketplace
-import uuid
+from app.core.bioinspiration import biomimetics_marketplace
 import json
-
 
 main = Blueprint('main', __name__)
 
-eng_sim = current_app.eng_sim
-bio_sim = current_app.bio_sim
-llm = current_app.llm
-
-
-
 @main.route('/')
 def index():
-    if 'session_id' not in session:
-        session['session_id'] = str(uuid.uuid4())
-    print(session['session_id'])
     return render_template('index.html')
 
 @main.route('/start')
@@ -37,34 +25,16 @@ def start():
         return "Query cannot be empty.", 400
 
     def generate():
-        
-        for output in biomimetics_marketplace(query, llm, eng_sim, bio_sim):
+        for output in biomimetics_marketplace(query, current_app.llm, current_app.eng_sim, current_app.bio_sim):
             if output['type'] == 'progress':
                 yield f"data: {output['message']}\n\n"
             elif output['type'] == 'results':
-                result_dct  = output['data']
+                result_dct = output['data']
                 # Send 'done' event with 'result_dct' as JSON data
-                yield f"event: done\ndata: {result_dct}\n\n"
+                yield f"event: done\ndata: {json.dumps(result_dct)}\n\n"
+
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
-
-
-
 
 @main.route('/results')
 def results():
-    query_id = request.args.get('query_id')
-    print('It works', query_id)
-    if not query_id:
-        return "No query ID provided.", 400
-    print('Received query_id in /results route:', query_id)  # Debugging
-    return render_template('results.html', query_id=query_id)
-
-
-
-@main.route('/api/results/<query_id>')
-def api_results(query_id):
-    result_doc = load_query(query_id)
-    if not result_doc or 'result' not in result_doc:
-        return jsonify({'error': 'No results found'}), 404
-    return jsonify({'result': result_doc['result']})
-
+    return render_template('results.html')
