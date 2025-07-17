@@ -9,12 +9,14 @@
 """
 
 from flask import Flask
+from .config.base import Config
 
 from ragpipeline.load_models import load_gwdg_embedding, load_gwdg_llm
 from ragpipeline.indexmanager.scopusindexmanager import ScopusIndexManager
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(Config)  # Load config from Config class
     app.secret_key = 'your_secret_key'
     
     gwdg_api_key = app.config["GWDG_API_KEY"]
