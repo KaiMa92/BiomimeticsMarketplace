@@ -10,10 +10,11 @@
 
 #categorize --> off-topic, Biology push, Technology pull
 
-from .utils import create_results, string_to_json, create_product_ideas
+from app.core.expertfinder import find_bio_experts, find_eng_experts
+from .utils import create_results, string_to_json, create_product_ideas, agent_text
 from app.services.llm import assisted_chat, agent
 from app.services.mongodb import store_query, load_assistant, store_result
-import uuid
+from llama_index.core.llms import ChatMessage
 
 def bioinspire(query, model, client, steps_config):
     steps = []
@@ -102,29 +103,30 @@ def run_agent_step(agent_name, model, client, input_text, query_id, step_number,
 
     return result  # Also return the raw result if needed for further steps
 
-def biomimetics_marketplace(query, model, client): 
+def biomimetics_marketplace(query, llm, eng_sim, bio_sim): 
 
-    
-    #categorize
-    #enhance
+
     #search
     #rank experts
     #describe experts
     
-    query_id = str(uuid.uuid4())
-    
-    categorizer = agent('Categorize1', model, client)
-    yield {'type': 'progress', 'message': categorizer.process_prompt}
-    categorie = categorizer.chat_and_safe(query, query_id, 0)
-    #yield {'type': 'progress', 'message': categorie}
+    #Categorize querys
+    yield {'type': 'progress', 'message': 'Categorizing user query...'}
+    categorie = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = agent_text('agents/categorize.txt'))]).message.blocks[0].text
 
     if "Engineering" in categorie: 
-        #Condense input
-        condenser = agent('Query_enricher', model, client) #'QueryCondenser1'
-        yield {'type': 'progress', 'message': condenser.process_prompt}
-        condensed_query = condenser.chat_and_safe(query, query_id, 1)
-        #yield {'type': 'progress', 'message': condensed_query}
+        #Enrich engineering query
+        yield {'type': 'progress', 'message': 'Enrich engineering query...'}
+        enriched_query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = agent_text('agents/enrich_eng_query.txt'))]).message.blocks[0].text
+        
+        #Search experts
+        yield {'type': 'progress', 'message': 'Search experts for analogous biosystems...'}
+        dct = find_bio_experts(bio_sim, query_text, location_filter = 'Frankfurt', top = 5)
 
+
+
+
+        dct = find_eng_experts(eng_sim, query_text, location_filter = 'Kaiserslautern', top = 5)
         #Brainstorm concepts
         brainstormer = agent("ConceptSuggestor1", model, client)
         yield {'type': 'progress', 'message': brainstormer.process_prompt}

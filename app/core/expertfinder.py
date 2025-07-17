@@ -170,12 +170,12 @@ def find_experts(sim, query_text, explain_agent, summary_agent, location_filter,
     return dct
 
 
-def find_bio_experts(bio_sim, query_text, location_filter = 'Frankfurt', top = 5):
+def find_bio_experts(bio_sim, query_text, location_filter, top):
     summary_agent = agent_text('agents/bio_expert_summarize.txt')
     explain_agent = agent_text('agents/bio_documents_explain.txt')
     return find_experts(bio_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
     
-def find_eng_experts(eng_sim, query_text, location_filter = 'Kaiserslautern', top = 5):
+def find_eng_experts(eng_sim, query_text, location_filter, top):
     summary_agent = agent_text('agents/eng_expert_summarize.txt')   
     explain_agent = agent_text('agents/eng_documents_explain.txt')
     return find_experts(eng_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
