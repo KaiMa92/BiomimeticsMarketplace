@@ -17,6 +17,12 @@ import json
 
 main = Blueprint('main', __name__)
 
+eng_sim = current_app.eng_sim
+bio_sim = current_app.bio_sim
+llm = current_app.llm
+
+
+
 @main.route('/')
 def index():
     if 'session_id' not in session:
@@ -31,9 +37,8 @@ def start():
         return "Query cannot be empty.", 400
 
     def generate():
-        client = current_app.openai_client
-        model = 'gpt-4o'#-mini' 
-        for output in biomimetics_marketplace(query,model,client):
+        
+        for output in biomimetics_marketplace(query, llm, eng_sim, bio_sim):
             if output['type'] == 'progress':
                 yield f"data: {output['message']}\n\n"
             elif output['type'] == 'results':
