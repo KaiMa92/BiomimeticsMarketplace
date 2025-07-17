@@ -19,6 +19,9 @@ app\static\images
 # Datasets
 datasets
 
+# Agents
+agents
+
 # C extensions
 *.so
 
