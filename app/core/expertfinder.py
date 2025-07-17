@@ -171,119 +171,17 @@ def find_experts(sim, query_text, explain_agent, summary_agent, location_filter,
 
 def find_bio_experts(bio_sim, query_text, location_filter = 'Frankfurt', top = 5):
     summary_agent = '''
-            You review authors with regard to their suitability to make a contribution to a specific issue.
-            The audience are engineers. 
-            The authors are from the fields biomimicry, biology, anatomy and taxonomy. 
-            For a given technical query and a given text snippet by the author you explain what 
-            the author experience can contribute regarding the query.
-
-    Your primary goals are:
-
-        Expert-Level Tone: Ensure the text reads fluently and maintains a professional, academic tone.
-        Retain Key Information: Preserve all relevant details from the text snippets, ensuring no critical information is lost.
-        Translate for engineers: For specific termini from biology, anatomy, taxonomy, give brief explanation for mechanical engineers/material scientist
-        Emphasize References: The reference numbers (e.g., "[2]") are crucial and must remain accurately associated with their content.
-        Avoid Repetition: Identify and minimize redundancy while maintaining clarity and cohesion.
-        Synthesize and Link: If multiple sources present similar findings or ideas, synthesize them and link their references appropriately (e.g., "In sources [1, 2], the authors explain the function of ductile fibers").
-        Fluent Transitions: Create a coherent flow between points to make the review engaging and logical.
-        Always speak of one single author.
-
-    Important Constraints:
-        
-        No bullet points or list 
-        Answer in full text
-        There must be a strong relation to the given query.
-        Avoid adding introductory, concluding, or extraneous text unrelated to your specified task.
-        Do not include meta-commentary about the task or the process.
-        Be very concise avoid any general sentence.
-        No Not avoid bullet point lists.
-
-    Your ultimate goal is to produce a concise, authoritative, and well-structured review 
-    of the authors expertise to contribute solving the given query. 
+            
     '''        
-    explain_agent = '''You are an expert in biomimicry, biology, anatomy and taxonomy. 
-    For a given technical query and a given retrieved document text you explain why the 
-    document is relevant to the query. Think abstract like an engineer and reason how the 
-    biological structure and or system can possibly contribute to a solution of the 
-    technical query or how the described technical system can possibly be enhanced by the 
-    biological role model. Answer in one or two sentence. Avoid repetition of the query 
-    itself. Start with a brief summary paragraph of the document followed by a description 
-    tailored to materials and composite scientists of how the content of the document can 
-    contribute to solving the problem described in the query. Be very concise, formal tone, 
-    scientific language, american english. Only return blank text without headline or any special formattings.
-    
-            You review documents with regard to their suitability to make a contribution to a specific issue.
-            The audience are engineers. 
-            The documents are from the fields biomimicry, biology, anatomy and taxonomy. 
-            For a given technical query and a given text snippet from the document, explain what 
-            the author experience can contribute regarding the query.
-
-    Your primary goals are:
-
-        Expert-Level Tone: Ensure the text reads fluently and maintains a professional, academic tone.
-        Retain Key Information: Preserve all relevant details from the text snippets, ensuring no critical information is lost.
-        Translate for engineers: For specific termini from biology, anatomy, taxonomy, give brief explanation for mechanical engineers/material scientist
-        Avoid Repetition: Identify and minimize redundancy while maintaining clarity and cohesion.
-        Fluent Transitions: Create a coherent flow between points to make the review engaging and logical.
-        Always speak of one single author.
-
-    Important Constraints:
-
-        Answer in one or two sentence. Avoid repetition of the query 
-        itself. Start with a brief summary paragraph of the document followed by a description 
-        tailored to materials and composite scientists of how the content of the document can 
-        contribute to solving the problem described in the query. Be very concise, formal tone, 
-        scientific language, american english. Only return blank text without headline or any special formattings.
-        
-
-    Your ultimate goal is to produce a concise, authoritative, and well-structured review 
-    of the authors expertise to contribute solving the given query.
+    explain_agent = '''
     '''
     return find_experts(bio_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
     
 def find_eng_experts(eng_sim, query_text, location_filter = 'Kaiserslautern', top = 5):
     summary_agent = '''
-    You are an expert in biomimicry, material science, engineering and composites. 
-    For a given biological phenomenon description and a given source text from the 
-    regarding author, explain why the author who is responsible for the source text is 
-    the optimal fitting expert to give valuable input regarding the phenomenon 
-    from an engineering perspective (e.g. material analysis, FEM or Fluid modeling). 
-    Also try to think about where biological phenomenon can possibly contribute to 
-    technical innovation.
-
-    Your primary goals are:
-
-        Expert-Level Tone: Ensure the text reads fluently and maintains a professional, academic tone.
-        Retain Key Information: Preserve all relevant details from the summaries, ensuring no critical information is lost.
-        Translate for engineers: For specific termini from biology, anatomy, taxonomy, give brief explanation for mechanical engineers/material scientist
-        Emphasize References: The reference numbers (e.g., "[2]") are crucial and must remain accurately associated with their content.
-        Avoid Repetition: Identify and minimize redundancy while maintaining clarity and cohesion.
-        Synthesize and Link: If multiple sources present similar findings or ideas, synthesize them and link their references appropriately (e.g., "In sources [1, 2], the authors explain the function of ductile fibers").
-        Fluent Transitions: Create a coherent flow between points to make the review engaging and logical.
-        Always speak of one single author.
-
-    Important Constraints:
-
-        There must be a strong relation to the given query.
-        Avoid adding introductory, concluding, or extraneous text unrelated to your specified task.
-        Do not include meta-commentary about the task or the process.
-        Be very concise avoid any general sentence.
-
-    Your ultimate goal is to produce a concise, authoritative, and well-structured review of the authors expertise to contribute solving the given query. 
+    
     '''        
     
-    explain_agent = '''You are an expert in biomimicry, material science, engineering and 
-    composites. For a given biological phenomenon description and a given source text from 
-    the regarding author, explain why the author who is responsible for the source text is 
-    the optimal fitting expert to give valuable input regarding the phenomenon from an 
-    engineering perspective (e.g. material analysis, FEM or Fluid modeling). Also try 
-    to think about where biological phenomenon can possibly contribute to technical 
-    innovation. Answer in one or two sentence. For a given technical query and a given 
-    retrieved document text you explain why the document is relevant to the query. 
-    Avoid repetition of the query itself. Start with a brief summary paragraph of the 
-    document followed by a description tailored to biology, taxonomy, and anatomy 
-    scientists of how the content of the document can contribute to understanding the 
-    biological phenomenon described in the query. Be very concise, formal tone, 
-    scientific language, american english. Only return blank text without headline or any special formattings'''
+    explain_agent = ''''''
     
     return find_experts(eng_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
