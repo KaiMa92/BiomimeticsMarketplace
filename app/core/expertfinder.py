@@ -7,6 +7,7 @@ Created on Wed Feb 26 14:49:27 2025
 
 import pandas as pd
 from llama_index.core.llms import ChatMessage
+from app.core.utils import agent_text
 
 def filter_by_keyword(df, filter_keyword):
     # Initialize an empty list to store the Frankfurt authors for each row
@@ -170,18 +171,11 @@ def find_experts(sim, query_text, explain_agent, summary_agent, location_filter,
 
 
 def find_bio_experts(bio_sim, query_text, location_filter = 'Frankfurt', top = 5):
-    summary_agent = '''
-            
-    '''        
-    explain_agent = '''
-    '''
+    summary_agent = agent_text('agents/bio_expert_summarize.txt')
+    explain_agent = agent_text('agents/bio_documents_explain.txt')
     return find_experts(bio_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
     
 def find_eng_experts(eng_sim, query_text, location_filter = 'Kaiserslautern', top = 5):
-    summary_agent = '''
-    
-    '''        
-    
-    explain_agent = ''''''
-    
+    summary_agent = agent_text('agents/eng_expert_summarize.txt')   
+    explain_agent = agent_text('agents/eng_documents_explain.txt')
     return find_experts(eng_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
