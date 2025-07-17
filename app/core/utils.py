@@ -12,6 +12,17 @@ from app.services import wikispecies as wiki
 import json
 from app.services.llm import assisted_chat
 
+def agent_text(file_path):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+        return content
+    except FileNotFoundError:
+        return f"Error: File not found at {file_path}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+    
+
 def create_results(sp_js, client):
     results = []
     system_prompt = 'For a given taxon Move to a higher taxonomic order. Only return the answer as one word.'
