@@ -42,10 +42,9 @@ def start():
             if output['type'] == 'progress':
                 yield f"data: {output['message']}\n\n"
             elif output['type'] == 'results':
-                query_id = output['query_id']
-                # Send 'done' event with 'query_id' as JSON data
-                data = json.dumps({'query_id': str(query_id)})
-                yield f"event: done\ndata: {data}\n\n"
+                result_dct  = output['data']
+                # Send 'done' event with 'result_dct' as JSON data
+                yield f"event: done\ndata: {result_dct}\n\n"
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 

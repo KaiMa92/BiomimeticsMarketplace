@@ -141,7 +141,6 @@ def save_html(string, path):
     with open(path, "w", encoding= "utf-8") as html_file:
         html_file.write(string)
 
-
 def find_experts(sim, query_text, explain_agent, summary_agent, location_filter, top): 
     retrieve_df = sim.retrieve(query_text)
     filtered_df = filter_by_keyword(retrieve_df, location_filter)
