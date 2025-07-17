@@ -107,7 +107,7 @@ def explain_all_nodes(sim, node_id_lst, query, agent_text, id_mapping_df):
     
 
 def summarize_nodes(sim, query_text, summarize_agent, node_explanations, author_name):
-    query_text = "Query: "+ query_text +'\nAuthor: ' + author_name+ '\nText: '+"\n".join(node_explanations)
+    query_text = "Query: "+ query_text +'\nAuthor: ' + author_name+ '\nDocument snippets: '+"\n".join(node_explanations)
     response = sim.llm.chat([ChatMessage(role="user", content=query_text)])
     summary = response.message.blocks[0].text
     return summary
@@ -171,12 +171,16 @@ def find_experts(sim, query_text, explain_agent, summary_agent, location_filter,
 
 def find_bio_experts(bio_sim, query_text, location_filter = 'Frankfurt', top = 5):
     summary_agent = '''
-            "You are an expert in biomimicry, biology, anatomy and taxonomy. For a given technical query and a given text you explain why the author who is responsible for the text is the optimal fitting expert to give valuable input regarding the query. Think abstract like an engineer and reason how the biological structure and or system can possibly contribute to a solution of the technical query or how the described technical system can possibly be enhanced by the biological role model.
+            You review authors with regard to their suitability to make a contribution to a specific issue.
+            The audience are engineers. 
+            The authors are from the fields biomimicry, biology, anatomy and taxonomy. 
+            For a given technical query and a given text snippet by the author you explain what 
+            the author experience can contribute regarding the query.
 
     Your primary goals are:
 
         Expert-Level Tone: Ensure the text reads fluently and maintains a professional, academic tone.
-        Retain Key Information: Preserve all relevant details from the summaries, ensuring no critical information is lost.
+        Retain Key Information: Preserve all relevant details from the text snippets, ensuring no critical information is lost.
         Translate for engineers: For specific termini from biology, anatomy, taxonomy, give brief explanation for mechanical engineers/material scientist
         Emphasize References: The reference numbers (e.g., "[2]") are crucial and must remain accurately associated with their content.
         Avoid Repetition: Identify and minimize redundancy while maintaining clarity and cohesion.
@@ -185,13 +189,17 @@ def find_bio_experts(bio_sim, query_text, location_filter = 'Frankfurt', top = 5
         Always speak of one single author.
 
     Important Constraints:
-
+        
+        No bullet points or list 
+        Answer in full text
         There must be a strong relation to the given query.
         Avoid adding introductory, concluding, or extraneous text unrelated to your specified task.
         Do not include meta-commentary about the task or the process.
         Be very concise avoid any general sentence.
+        No Not avoid bullet point lists.
 
-    Your ultimate goal is to produce a concise, authoritative, and well-structured review of the authors expertise to contribute solving the given query. 
+    Your ultimate goal is to produce a concise, authoritative, and well-structured review 
+    of the authors expertise to contribute solving the given query. 
     '''        
     explain_agent = '''You are an expert in biomimicry, biology, anatomy and taxonomy. 
     For a given technical query and a given retrieved document text you explain why the 
@@ -202,7 +210,35 @@ def find_bio_experts(bio_sim, query_text, location_filter = 'Frankfurt', top = 5
     itself. Start with a brief summary paragraph of the document followed by a description 
     tailored to materials and composite scientists of how the content of the document can 
     contribute to solving the problem described in the query. Be very concise, formal tone, 
-    scientific language, american english. Only return blank text without headline or any special formattings'''
+    scientific language, american english. Only return blank text without headline or any special formattings.
+    
+            You review documents with regard to their suitability to make a contribution to a specific issue.
+            The audience are engineers. 
+            The documents are from the fields biomimicry, biology, anatomy and taxonomy. 
+            For a given technical query and a given text snippet from the document, explain what 
+            the author experience can contribute regarding the query.
+
+    Your primary goals are:
+
+        Expert-Level Tone: Ensure the text reads fluently and maintains a professional, academic tone.
+        Retain Key Information: Preserve all relevant details from the text snippets, ensuring no critical information is lost.
+        Translate for engineers: For specific termini from biology, anatomy, taxonomy, give brief explanation for mechanical engineers/material scientist
+        Avoid Repetition: Identify and minimize redundancy while maintaining clarity and cohesion.
+        Fluent Transitions: Create a coherent flow between points to make the review engaging and logical.
+        Always speak of one single author.
+
+    Important Constraints:
+
+        Answer in one or two sentence. Avoid repetition of the query 
+        itself. Start with a brief summary paragraph of the document followed by a description 
+        tailored to materials and composite scientists of how the content of the document can 
+        contribute to solving the problem described in the query. Be very concise, formal tone, 
+        scientific language, american english. Only return blank text without headline or any special formattings.
+        
+
+    Your ultimate goal is to produce a concise, authoritative, and well-structured review 
+    of the authors expertise to contribute solving the given query.
+    '''
     return find_experts(bio_sim, query_text, explain_agent = explain_agent, summary_agent = summary_agent, location_filter = location_filter, top = top)
     
 def find_eng_experts(eng_sim, query_text, location_filter = 'Kaiserslautern', top = 5):
