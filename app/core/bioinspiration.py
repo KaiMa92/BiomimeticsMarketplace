@@ -29,6 +29,7 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
     #Categorize querys
     yield {'type': 'progress', 'message': 'Categorizing user query...'}
     categories = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = agent_text('agents/categorize.txt'))]).message.blocks[0].text
+    print(categories)
 
     if "Engineering" in categories: 
         summary_agent = agent_text('agents/bio_expert_summarize.txt')

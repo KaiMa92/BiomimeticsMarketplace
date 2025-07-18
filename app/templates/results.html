@@ -18,7 +18,7 @@
 
         <!-- Display Query and Location -->
         <h1 id="query">{{ results_data.Query }}</h1>
-        <h2 id="location">{{ results_data.Location }}</h2>
+        <h2 id="location">Search for experts in: {{ results_data.Location }}</h2>
         <!-- Placeholder for dynamically loaded content -->
         <div class="carousel" id="results-carousel">
             <!-- Results will be dynamically injected here -->
@@ -31,46 +31,46 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
     <!-- Include external JavaScript files -->
-    <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
+    <!--<script src="{{ url_for('static', filename='js/carousel.js') }}"></script>-->
     <!--<script src="{{ url_for('static', filename='js/buttons.js') }}"></script> -->
     <!--<script src="{{ url_for('static', filename='js/load_query.js') }}"></script> -->
     <script>
-            const resultsData =  results_data|tojson|safe ;  // Pass the results data from Flask to JavaScript
+    const resultsData =  {{results_data|tojson|safe}};  // Pass the results data from Flask to JavaScript
 
-            $(document).ready(function() {
-                const authors = resultsData.Authors;
-                const carousel = $('#results-carousel');
+    $(document).ready(function() {
+        const authors = resultsData.Authors;
+        const carousel = $('#results-carousel');
 
-                if (authors.length === 0) {
-                    $('#no-results-message').show();
-                } else {
-                    authors.forEach(author => {
-                        const slide = `
-                            <div>
-                                <h3>${author.author_name}</h3>
-                                <p>${author.affiliations.join(', ')}</p>
-                                <p>${author.summary}</p>
-                                <p>Sources: ${author.sources.join(', ')}</p>
-                            </div>
-                        `;
-                        carousel.append(slide);
-                    });
-
-                    // Initialize the carousel
-                    carousel.slick({
-                        dots: true,
-                        infinite: true,
-                        speed: 300,
-                        slidesToShow: 1,
-                        slidesToScroll: 1
-                    });
-                }
+        if (authors.length === 0) {
+            $('#no-results-message').show();
+        } else {
+            authors.forEach(author => {
+                const slide = `
+                    <div class="carousel-item">
+                        <h3>${author.author_name}</h3>
+                        <p>${author.affiliations}</p>
+                        <p>${author.summary}</p>
+                        <p>References:</p>
+                        <ul>
+                            ${author.sources.map(source => `<li>${source}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                carousel.append(slide);
             });
-        </script>
-    <!-- Pass query_id to JavaScript -->
-    <script>
-        const queryId = "{{ query_id }}";  // Pass the query ID from Flask to JavaScript
-    </script>
+
+            // Initialize the carousel
+            carousel.slick({
+                dots: true,
+                infinite: true,
+                speed: 300,
+                slidesToShow: 1,
+                slidesToScroll: 1
+            });
+        }
+    });
+</script>
+
     </div>
 </body>
 </html>
