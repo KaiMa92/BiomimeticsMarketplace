@@ -27,7 +27,7 @@ document.getElementById('searchForm').onsubmit = function(event) {
 
         // Hide the progress container and redirect to results page
         progressContainer.style.display = 'none';
-        window.location.href = '/results?query_id=' + encodeURIComponent(queryId);
+        window.location.href = '/results';
     });
 
     source.onerror = function(err) {

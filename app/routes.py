@@ -46,7 +46,6 @@ def start():
 @main.route('/results')
 def results():
     # Retrieve the result_dct from the session and parse it as JSON
-    os.remove('result.json')
     if os.path.exists('result.json'):
         with open('result.json', 'r') as f:
             result_dct = json.loads(f.read())

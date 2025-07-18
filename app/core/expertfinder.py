@@ -112,7 +112,6 @@ def explain_all_nodes(sim, node_id_lst, query, agent_text, id_mapping_df):
         query_text = 'Query: ' + query_text + 'System prompt:'
         explanation = sim.ask_node(node_id, query_text, agent_text) + ' ['+ str(reference) + ']'
         explanation_lst.append(explanation)
-        # Always mention the Node id in Square brackets in the text e.g. In [1] an overview... or ... the relevance of moulding is described in [2].... 
     return explanation_lst
     
 
