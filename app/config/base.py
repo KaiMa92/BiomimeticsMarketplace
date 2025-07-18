@@ -21,5 +21,5 @@ class Config:
     TESTING = False
 
     # OpenAI Configuration
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    #OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     GWDG_API_KEY = os.getenv("GWDG_API_KEY")

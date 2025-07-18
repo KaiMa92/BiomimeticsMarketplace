@@ -19,7 +19,7 @@ def format_multiline(text):
     return formatted_data
 
 def biomimetics_marketplace(query, llm, eng_sim, bio_sim): 
-    
+    print('categorize')
     #Categorize querys
     yield {'type': 'progress', 'message': 'Categorizing user query...'}
     categorie = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = agent_text('agents/categorize.txt'))]).message.blocks[0].text

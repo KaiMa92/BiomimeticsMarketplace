@@ -142,15 +142,21 @@ def save_html(string, path):
         html_file.write(string)
 
 def find_experts(sim, query_text, explain_agent, summary_agent, location_filter, top): 
+    print('retrieve')
     retrieve_df = sim.retrieve(query_text)
+    print('filter')
     filtered_df = filter_by_keyword(retrieve_df, location_filter)
+    print('rank authors')
     ranked_authors_df = author_ranking(filtered_df)    
     df_top = ranked_authors_df.head(top)
     df_top["author_name"] = df_top.index.str.replace(r"\s\([^)]*\)", "", regex=True)
     unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
     id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
+    print('cite')
     id_mapping_df["citation"] = id_mapping_df.apply(lambda row: format_ieee_citation(retrieve_df,row["node_id"], row["reference"]), axis=1)
+    print('explain')
     df_top["explanation"] = df_top["nodes"].apply(lambda node_id_lst: explain_all_nodes(sim, node_id_lst, query_text, explain_agent, id_mapping_df))
+    print('summarize')
     df_top["summary"] = df_top.apply(lambda row: summarize_nodes(sim, query_text, summary_agent, row["explanation"], row["author_name"]), axis=1)
     df_top['affiliations'] = df_top['affiliations'].str[0]
     
@@ -165,7 +171,7 @@ def find_experts(sim, query_text, explain_agent, summary_agent, location_filter,
            'Location': location_filter, 
            'Authors': records, 
            'Sources': list(id_mapping_df['citation'])}
-    
+    print(dct)
     return dct
 
 
