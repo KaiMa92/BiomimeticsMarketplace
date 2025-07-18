@@ -31,7 +31,7 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
         
         #Search experts
         yield {'type': 'progress', 'message': 'Search experts for analogous biosystems...'}
-        dct = find_bio_experts(bio_sim, enriched_query, location_filter = 'Frankfurt', top = 5)
+        dct = find_bio_experts_dummy(bio_sim, enriched_query, location_filter = 'Frankfurt', top = 5)
 
         yield {'type': 'results', 'data': dct}
 
