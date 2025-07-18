@@ -9,7 +9,7 @@
 """
 
 from flask import Blueprint, render_template, request, current_app, jsonify, session, Response, stream_with_context, redirect, url_for
-from app.core.bioinspiration import biomimetics_marketplace
+from app.core.bioinspiration import biomimetics_marketplace, biomimetics_marketplace_dummy
 from flask.sessions import SecureCookieSessionInterface
 import json
 import os
@@ -28,7 +28,7 @@ def start():
 
     def generate():
         print(current_app.llm)
-        for output in biomimetics_marketplace(query, current_app.llm, current_app.eng_sim, current_app.bio_sim):
+        for output in biomimetics_marketplace_dummy(query, current_app.llm, current_app.eng_sim, current_app.bio_sim):
             if output['type'] == 'progress':
                 yield f"data: {output['message']}\n\n"
             elif output['type'] == 'results':

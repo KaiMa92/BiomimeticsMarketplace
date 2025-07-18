@@ -23,8 +23,8 @@ def create_app():
     print('GWDG', gwdg_api_key)
     
     
-    app.llm = load_gwdg_llm('qwen3-235b-a22b', api_key= gwdg_api_key)#
-    #app.llm = load_gwdg_llm('mistral-large-instruct', api_key= gwdg_api_key)#
+    #app.llm = load_gwdg_llm('qwen3-235b-a22b', api_key= gwdg_api_key)#
+    app.llm = load_gwdg_llm('mistral-large-instruct', api_key= gwdg_api_key)#
     print(app.llm)
     app.embedding = load_gwdg_embedding()
     app.bio_sim = ScopusIndexManager(llm = app.llm, embedding_model = app.embedding, index_path = 'datasets/senckenberg/index')
