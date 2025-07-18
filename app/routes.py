@@ -25,11 +25,14 @@ def start():
         return "Query cannot be empty.", 400
 
     def generate():
+        print(current_app.llm)
         for output in biomimetics_marketplace(query, current_app.llm, current_app.eng_sim, current_app.bio_sim):
             if output['type'] == 'progress':
                 yield f"data: {output['message']}\n\n"
             elif output['type'] == 'results':
                 result_dct = output['data']
+                 # Store the result_dct in the session
+                session['result_dct'] = json.dumps(result_dct)
                 # Send 'done' event with 'result_dct' as JSON data
                 yield f"event: done\ndata: {json.dumps(result_dct)}\n\n"
 
@@ -37,4 +40,7 @@ def start():
 
 @main.route('/results')
 def results():
-    return render_template('results.html')
+    # Retrieve the result_dct from the session and parse it as JSON
+    result_dct_json = session.get('result_dct', '{}')
+    result_dct = json.loads(result_dct_json)
+    return render_template('results.html', results_data=result_dct)

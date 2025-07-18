@@ -10,7 +10,7 @@
 
 #categorize --> off-topic, Biology push, Technology pull
 
-from app.core.expertfinder import find_bio_experts, find_eng_experts
+from app.core.expertfinder import find_bio_experts, find_eng_experts, find_bio_experts_dummy
 from .utils import agent_text
 from llama_index.core.llms import ChatMessage
 
