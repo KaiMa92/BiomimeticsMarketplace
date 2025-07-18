@@ -8,15 +8,17 @@
 @Version: 0.0.
 """
 
-from flask import Blueprint, render_template, request, current_app, jsonify, session, Response, stream_with_context
+from flask import Blueprint, render_template, request, current_app, jsonify, session, Response, stream_with_context, redirect, url_for
 from app.core.bioinspiration import biomimetics_marketplace
+from flask.sessions import SecureCookieSessionInterface
 import json
+import os
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', error_message=session.get('error_message', None))
 
 @main.route('/start')
 def start():
@@ -31,9 +33,12 @@ def start():
                 yield f"data: {output['message']}\n\n"
             elif output['type'] == 'results':
                 result_dct = output['data']
-                 # Store the result_dct in the session
-                session['result_dct'] = json.dumps(result_dct)
-                # Send 'done' event with 'result_dct' as JSON data
+                # Persist json on harddrive
+                if os.path.exists('result.json'):
+                    os.remove('result.json')
+                with open('result.json', 'w') as f:
+                    json.dump(result_dct, f, indent=4)
+                # Now yield the final done event
                 yield f"event: done\ndata: {json.dumps(result_dct)}\n\n"
 
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
@@ -41,6 +46,15 @@ def start():
 @main.route('/results')
 def results():
     # Retrieve the result_dct from the session and parse it as JSON
-    result_dct_json = session.get('result_dct', '{}')
-    result_dct = json.loads(result_dct_json)
+    os.remove('result.json')
+    if os.path.exists('result.json'):
+        with open('result.json', 'r') as f:
+            result_dct = json.loads(f.read())
+        os.remove('result.json')
+    else: 
+        session['error_message'] = 'Error'
+        return redirect(url_for('main.index'))
+
+    print("results: result_dct:")
+    print(result_dct)
     return render_template('results.html', results_data=result_dct)

@@ -15,6 +15,10 @@
         </div>
 
         <main>
+            {% if error_message %}
+            <p>Error: {{ error_message }}</p>
+            {% endif %}
+            
             <form id="searchForm" class="search-form">
                 <input type="text" id="search" class="search-input" name="query" placeholder="Type your query here..." required>
                 <button type="submit" id="startButton" class="techy-button">Search</button>
