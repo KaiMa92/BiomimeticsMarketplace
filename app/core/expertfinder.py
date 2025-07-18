@@ -105,19 +105,18 @@ def get_citations(row, retrieve_df):
     return citations
 
 def explain_all_nodes(sim, node_id_lst, query, agent_text, id_mapping_df):
-    query_text = query
     explanation_lst = []
     for node_id in node_id_lst: 
         reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
-        query_text = 'Query: ' + query_text + 'System prompt:'
-        explanation = sim.ask_node(node_id, query_text, agent_text) + ' ['+ str(reference) + ']'
+        query = 'Query: ' + query + 'System prompt:'
+        explanation = sim.ask_node(node_id, query, agent_text) + ' ['+ str(reference) + ']'
         explanation_lst.append(explanation)
     return explanation_lst
     
 
-def summarize_nodes(sim, query_text, summarize_agent, node_explanations, author_name):
-    query_text = "Query: "+ query_text +'\nAuthor: ' + author_name+ '\nDocument snippets: '+"\n".join(node_explanations)
-    response = sim.llm.chat([ChatMessage(role="user", content=query_text)])
+def summarize_nodes(sim, query, summarize_agent, node_explanations, author_name):
+    query = "Query: "+ query +'\nAuthor: ' + author_name+ '\nDocument snippets: '+"\n".join(node_explanations)
+    response = sim.llm.chat([ChatMessage(role="user", content=query), ChatMessage(role='assistant', content = summarize_agent)])
     summary = response.message.blocks[0].text
     return summary
 

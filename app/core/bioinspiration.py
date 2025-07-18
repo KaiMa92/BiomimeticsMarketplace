@@ -44,6 +44,7 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
         sim = eng_sim
     
     else: 
+        print('Should not land here')
         pass #error message necessary
     
     #Enrich engineering query
@@ -63,18 +64,21 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
     unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
     id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
 
-    yield {'type': 'progress', 'message': 'Read author papers...'}
+    yield {'type': 'progress', 'message': 'Read abstracts...'}
     explanations = []
     # iterate through the values in the "nodes" column
+    total_number_abstracts = sum(len(node_id_lst) for node_id_lst in df_top["nodes"])
+    number_abstract = 0
     for node_id_lst in df_top["nodes"]:
         explanation_lst = []
         for node_id in node_id_lst: 
+            number_abstract += 1
+            paper_title = retrieve_df.loc[node_id]['Title']
+            yield {'type': 'progress', 'message': 'Read abstract ' + str(number_abstract) + '/' + str(total_number_abstracts)+': "' + paper_title + '"...'}
             reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
             query = 'Query: ' + query + 'System prompt:'
             explanation = sim.ask_node(node_id, query, agent_text) + ' ['+ str(reference) + ']'
             explanation_lst.append(explanation)
-            paper_title = retrieve_df.loc[node_id]['Title']
-            yield {'type': 'progress', 'message': 'Read "' + paper_title + '"...'}
         explanations.append(explanation_lst)
     # assign the list back as the new column
     df_top["explanation"] = explanations
@@ -95,8 +99,7 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
             row["author_name"]
         )
         summaries.append(summary)
-        df_top["summary"] = summaries
-        df_top["summary"] = df_top.apply(lambda row: summarize_nodes(sim, query, summary_agent, row["explanation"], row["author_name"]), axis=1)
+    df_top["summary"] = summaries
 
     df_top['affiliations'] = df_top['affiliations'].str[0]
     yield {'type': 'progress', 'message': 'Transform output...'}
