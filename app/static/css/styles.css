@@ -266,7 +266,7 @@ p {
     font-size: 1em; /* Easy to read size */
     color: #ffffff;
     text-align: justify;
-    text-justify: inter-word
+    text-justify: inter-word;
     margin: 0 auto 20px auto;
 }
 
