@@ -18,7 +18,7 @@
 
         <!-- Display Query and Location -->
         <h1 id="query">{{ results_data.Query }}</h1>
-        <h2 id="location">Search for experts in: {{ results_data.Location }}</h2>
+        <h2 id="location">Search for experts in {{ results_data.Location }}</h2>
         <!-- Placeholder for dynamically loaded content -->
         <div class="carousel" id="results-carousel">
             <!-- Results will be dynamically injected here -->
@@ -47,13 +47,13 @@
             authors.forEach(author => {
                 const slide = `
                     <div class="carousel-item">
-                        <h3>${author.author_name}</h3>
-                        <p>${author.affiliations}</p>
-                        <p>${author.summary}</p>
-                        <p>References:</p>
-                        <ul>
-                            ${author.sources.map(source => `<li>${source}</li>`).join('')}
-                        </ul>
+                        <h3 class="author-name">${author.author_name}</h3>
+                        <p class="affiliations">${author.affiliations}</p>
+                        <p class="summary">${author.summary}</p>
+                        <p class="references-title">References:</p>
+                        <div class="references">
+                            ${author.sources.join('')}
+                        </div>
                     </div>
                 `;
                 carousel.append(slide);
@@ -70,7 +70,14 @@
         }
     });
 </script>
-
+    </div>
+    <div class="footer-section">
+        <div class="footer-logos">
+            <img src="{{ url_for('static', filename='images/BMFTR.jpg') }}" alt="Logo 1" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/THM.png') }}" alt="Logo 2" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/Senckenberg.png') }}" alt="Logo 3" class="footer-logo">
+            <img src="{{ url_for('static', filename='images/IVW.png') }}" alt="Logo 4" class="footer-logo">
+        </div>
     </div>
 </body>
 </html>

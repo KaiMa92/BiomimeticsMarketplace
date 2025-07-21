@@ -78,8 +78,7 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
             paper_title = retrieve_df.loc[node_id]['Title']
             yield {'type': 'progress', 'message': 'Read abstract ' + str(number_abstract) + '/' + str(total_number_abstracts)+': "' + paper_title + '"...'}
             reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
-            query = 'Query: ' + query + 'System prompt:'
-            explanation = sim.ask_node(node_id, query, agent_text) + ' ['+ str(reference) + ']'
+            explanation = sim.ask_node(node_id, 'Query: ' + query + 'System prompt:', agent_text) + ' ['+ str(reference) + ']'
             explanation_lst.append(explanation)
         explanations.append(explanation_lst)
     # assign the list back as the new column

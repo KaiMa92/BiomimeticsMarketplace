@@ -165,15 +165,15 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 83px;
+    gap: 33px;
     flex-wrap: wrap;
     margin: 0 auto;
 }
 
 .footer-logo {
-    max-height: 60px;
+    max-height: 120px;
     width: auto;
-    max-width: 180px;
+    max-width: 170px;
     height: auto;
     margin: 0;
 }
@@ -232,7 +232,7 @@ p {
 .slick-prev, .slick-next {
     background-color: #7ed957;
     color: #1f2130;
-    font-size: 24px;
+    font-size: 36px;
     border-radius: 50%;
     border: none;
 }
@@ -241,17 +241,48 @@ p {
     background-color: #66c64c;
 }
 
-.like-button, .dislike-button {
-    background-color: #7ed957;
-    color: #1f2130;
-    border: none;
-    padding: 10px 20px;
-    margin: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    border-radius: 5px;
+
+/* Style for author name */
+.author-name {
+    font-style: bold;
+    font-size: 1.4em; /* Same size as the subtitle */
+    color: #ffffff;
+    line-height: 1.4;
+    text-align: center;
+    margin: 0 auto 20px auto;
 }
 
-.dislike-button {
-    background-color: #66c64c;
+/* Style for affiliations */
+.affiliations {
+    font-style: italic;
+    font-size: 1.2em; /* Larger text */
+    color: #ffffff;
+    text-align: left;
+    margin: 0 auto 20px auto;
+}
+
+/* Style for summary */
+.summary {
+    font-size: 1em; /* Easy to read size */
+    color: #ffffff;
+    text-align: justify;
+    text-justify: inter-word
+    margin: 0 auto 20px auto;
+}
+
+/* Style for references title */
+.references-title {
+    font-weight: bold;
+    font-size: 1.2em; /* Larger text */
+    color: #ffffff;
+    text-align: left;
+    margin: 0 auto 10px auto;
+}
+
+/* Style for references */
+.references {
+    font-size: 1em;
+    color: #ffffff;
+    text-align: left;
+    margin: 0 auto;
 }

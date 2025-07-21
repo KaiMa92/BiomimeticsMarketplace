@@ -93,10 +93,10 @@ def author_ranking(df):
 def format_ieee_citation(df, node_id, nr):
     row = df.loc[node_id]
     return (
-        f"[{nr}] {row['Authors']}, “{row['Title']},” <i>{row['Source title']}</i>, "
-        f"vol. {row['Volume']}, no. {row['Issue']}, pp. {row['Page start']}-{row['Page end']}, {row['Year']}. "
-        f"DOI: <a href=\"https://doi.org/{row['DOI']}\">{row['DOI']}</a>."
-    )
+    f"[{nr}] {row['Authors']}, “{row['Title']},” <i>{row['Source title']}</i>, "
+    f"vol. {row['Volume']}, no. {row['Issue']}, pp. {row['Page start']}-{row['Page end']}, {row['Year']}. "
+    f"DOI: <a href=\"https://doi.org/{row['DOI']}\" style=\"color: #7ed957; text-decoration: none;\">{row['DOI']}</a>.<br>"
+)
 
 def get_citations(row, retrieve_df):
     citations = []
