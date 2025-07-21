@@ -20,9 +20,9 @@ def format_multiline(text):
     return formatted_data
 
 def biomimetics_marketplace(query, llm, eng_sim, bio_sim): 
-
+    initial_query = query
     location_filter = 'Frankfurt'
-    top = 5
+    top = 2
 
 
     print('categorize')
@@ -113,7 +113,7 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
         .to_dict(orient="records")
     )
     
-    dct = {'Query': query, 
+    dct = {'Query': initial_query, 
         'Location': location_filter, 
         'Authors': records}
     print(dct)
