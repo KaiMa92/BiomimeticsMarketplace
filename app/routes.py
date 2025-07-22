@@ -5,7 +5,7 @@
 @facility: Leibniz Institut für Verbundwerkstoffe GmbH
 @license: MIT License
 @copyright: Copyright (c) 2023 Leibniz Institut für Verbundwerkstoffe GmbH
-@Version: 0.0.
+@Version: 1.0.
 """
 
 from flask import Blueprint, render_template, request, current_app, jsonify, session, Response, stream_with_context, redirect, url_for

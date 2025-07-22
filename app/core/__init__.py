@@ -5,5 +5,5 @@
 @facility: Leibniz Institut für Verbundwerkstoffe GmbH
 @license: MIT License
 @copyright: Copyright (c) 2023 Leibniz Institut für Verbundwerkstoffe GmbH
-@Version: 0.0.
+@Version: 1.0.
 """
