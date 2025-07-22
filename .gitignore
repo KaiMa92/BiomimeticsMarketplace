@@ -25,9 +25,10 @@ agents
 # C extensions
 *.so
 
-#impressum and privacy
+#impressum, about and privacy
 impressum.html
 privacy.html
+about.html
 
 # Distribution / packaging
 .Python

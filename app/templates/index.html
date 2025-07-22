@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Search for Inspiration</title>
+    <title>Search for Experts</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
@@ -44,6 +44,7 @@
         
     <div class="legal-links">
         | <a href="{{ url_for('main.index') }}" style="color:#7ed957; text-decoration:none;">Startseite</a> |
+        <a href="{{ url_for('main.about') }}" style="color:#7ed957; text-decoration:none;">About</a> |
         <a href="{{ url_for('main.privacy') }}" style="color:#7ed957; text-decoration:none;">Datenschutzerklärung</a> |
         <a href="{{ url_for('main.impressum') }}" style="color:#7ed957; text-decoration:none;">Impressum</a> |
     </div>

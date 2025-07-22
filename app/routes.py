@@ -67,3 +67,8 @@ def impressum():
 def privacy():
     """Rendert die Datenschutz-Seite."""
     return render_template('privacy.html')
+
+@main.route('/about')  # alternativ /datenschutz
+def about():
+    """Rendert die about Seite."""
+    return render_template('about.html')
