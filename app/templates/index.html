@@ -10,7 +10,7 @@
         <div class="header-container">
             <img src="{{ url_for('static', filename='images/MarketplaceLogo.png') }}" alt="Main Logo" class="main-logo">
             <h2 class="subtitle">
-                Inspire Engineers to Solve Technical Challenges and Biologists to Transform Phenomena into Product Ideas.
+                Find experts from biology for your technical problem and support from engineering for research into biological phenomena.
             </h2>
         </div>
 
@@ -41,6 +41,13 @@
                 <img src="{{ url_for('static', filename='images/IVW.png') }}" alt="Logo 4" class="footer-logo">
             </div>
         </div>
+        
+    <div class="legal-links">
+        | <a href="{{ url_for('main.index') }}" style="color:#7ed957; text-decoration:none;">Startseite</a> |
+        <a href="{{ url_for('main.privacy') }}" style="color:#7ed957; text-decoration:none;">Datenschutzerklärung</a> |
+        <a href="{{ url_for('main.impressum') }}" style="color:#7ed957; text-decoration:none;">Impressum</a> |
+    </div>
+
     </div>
     <script src="{{ url_for('static', filename='js/progress_update.js') }}"></script>
 </body>

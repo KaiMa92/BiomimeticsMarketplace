@@ -78,6 +78,14 @@
             <img src="{{ url_for('static', filename='images/Senckenberg.png') }}" alt="Logo 3" class="footer-logo">
             <img src="{{ url_for('static', filename='images/IVW.png') }}" alt="Logo 4" class="footer-logo">
         </div>
+
+         <div class="legal-links">
+        | <a href="{{ url_for('main.index') }}" style="color:#7ed957; text-decoration:none;">Startseite</a> |
+        <a href="{{ url_for('main.privacy') }}" style="color:#7ed957; text-decoration:none;">Datenschutzerklärung</a> |
+        <a href="{{ url_for('main.impressum') }}" style="color:#7ed957; text-decoration:none;">Impressum</a> |
+        
+    </div>
+
     </div>
 </body>
 </html>

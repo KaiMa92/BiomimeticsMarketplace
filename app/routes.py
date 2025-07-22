@@ -57,3 +57,13 @@ def results():
     print("results: result_dct:")
     print(result_dct)
     return render_template('results.html', results_data=result_dct)
+
+@main.route('/impressum')
+def impressum():
+    """Rendert die Impressum-Seite."""
+    return render_template('impressum.html')
+
+@main.route('/privacy')  # alternativ /datenschutz
+def privacy():
+    """Rendert die Datenschutz-Seite."""
+    return render_template('privacy.html')
