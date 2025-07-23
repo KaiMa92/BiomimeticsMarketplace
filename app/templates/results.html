@@ -14,17 +14,17 @@
 
 <body>
     <div class="content-wrapper-results">
-    <div class="container">
+        <div class="container">
 
-        <!-- Display Query and Location -->
-        <h1 id="query">{{ results_data.Query }}</h1>
-        <h2 id="location">Search for experts in {{ results_data.Location }}</h2>
-        <!-- Placeholder for dynamically loaded content -->
-        <div class="carousel" id="results-carousel">
-            <!-- Results will be dynamically injected here -->
+            <!-- Display Query and Location -->
+            <h2 id="query">{{ results_data.Query }}</h1>
+            <h2 id="location">Search for experts in {{ results_data.Location }}</h2>
+            <!-- Placeholder for dynamically loaded content -->
+            <div class="carousel" id="results-carousel">
+                <!-- Results will be dynamically injected here -->
+            </div>
+            <p id="no-results-message" style="display:none;">No results found.</p>
         </div>
-        <p id="no-results-message" style="display:none;">No results found.</p>
-    </div>
 
     <!-- Add jQuery and Slick JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -35,58 +35,59 @@
     <!--<script src="{{ url_for('static', filename='js/buttons.js') }}"></script> -->
     <!--<script src="{{ url_for('static', filename='js/load_query.js') }}"></script> -->
     <script>
-    const resultsData =  {{results_data|tojson|safe}};  // Pass the results data from Flask to JavaScript
+        const resultsData =  {{results_data|tojson|safe}};  // Pass the results data from Flask to JavaScript
 
-    $(document).ready(function() {
-        const authors = resultsData.Authors;
-        const carousel = $('#results-carousel');
+        $(document).ready(function() {
+            const authors = resultsData.Authors;
+            const carousel = $('#results-carousel');
 
-        if (authors.length === 0) {
-            $('#no-results-message').show();
-        } else {
-            authors.forEach(author => {
-                const slide = `
-                    <div class="carousel-item">
-                        <h3 class="author-name">${author.author_name}</h3>
-                        <p class="affiliations">${author.affiliations}</p>
-                        <p class="summary">${author.summary}</p>
-                        <p class="references-title">References:</p>
-                        <div class="references">
-                            ${author.sources.join('')}
+            if (authors.length === 0) {
+                $('#no-results-message').show();
+            } else {
+                authors.forEach(author => {
+                    const slide = `
+                        <div class="carousel-item">
+                            <h3 class="author-name">${author.author_name}</h3>
+                            <p class="affiliations">${author.affiliations}</p>
+                            <p class="summary">${author.summary}</p>
+                            <p class="references-title">References:</p>
+                            <div class="references">
+                                ${author.sources.join('')}
+                            </div>
                         </div>
-                    </div>
-                `;
-                carousel.append(slide);
-            });
+                    `;
+                    carousel.append(slide);
+                });
 
-            // Initialize the carousel
-            carousel.slick({
-                dots: true,
-                infinite: true,
-                speed: 300,
-                slidesToShow: 1,
-                slidesToScroll: 1
-            });
-        }
-    });
-</script>
-    </div>
-    <div class="footer-section">
-        <div class="footer-logos">
-            <img src="{{ url_for('static', filename='images/BMFTR.jpg') }}" alt="Logo 1" class="footer-logo">
-            <img src="{{ url_for('static', filename='images/THM.png') }}" alt="Logo 2" class="footer-logo">
-            <img src="{{ url_for('static', filename='images/Senckenberg.png') }}" alt="Logo 3" class="footer-logo">
-            <img src="{{ url_for('static', filename='images/IVW.png') }}" alt="Logo 4" class="footer-logo">
+                // Initialize the carousel
+                carousel.slick({
+                    dots: true,
+                    infinite: true,
+                    speed: 300,
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                });
+            }
+        });
+    </script>
+    
+
+        <div class="footer-section">
+            <div class="footer-logos">
+                <img src="{{ url_for('static', filename='images/BMFTR.jpg') }}" alt="Logo 1" class="footer-logo">
+                <img src="{{ url_for('static', filename='images/THM.png') }}" alt="Logo 2" class="footer-logo">
+                <img src="{{ url_for('static', filename='images/Senckenberg.png') }}" alt="Logo 3" class="footer-logo">
+                <img src="{{ url_for('static', filename='images/IVW.png') }}" alt="Logo 4" class="footer-logo">
+            </div>
         </div>
 
-         <div class="legal-links">
-        | <a href="{{ url_for('main.index') }}" style="color:#7ed957; text-decoration:none;">Startseite</a> |
-        <a href="{{ url_for('main.about') }}" style="color:#7ed957; text-decoration:none;">About</a> |
-        <a href="{{ url_for('main.privacy') }}" style="color:#7ed957; text-decoration:none;">Datenschutzerklärung</a> |
-        <a href="{{ url_for('main.impressum') }}" style="color:#7ed957; text-decoration:none;">Impressum</a> |
-        
+        <div class="legal-links">
+            | <a href="{{ url_for('main.index') }}" style="color:#7ed957; text-decoration:none;">Startseite</a> |
+            <a href="{{ url_for('main.about') }}" style="color:#7ed957; text-decoration:none;">About</a> |
+            <a href="{{ url_for('main.privacy') }}" style="color:#7ed957; text-decoration:none;">Datenschutzerklärung</a> |
+            <a href="{{ url_for('main.impressum') }}" style="color:#7ed957; text-decoration:none;">Impressum</a> |  
+        </div>
     </div>
-
-    </div>
+    
 </body>
 </html>

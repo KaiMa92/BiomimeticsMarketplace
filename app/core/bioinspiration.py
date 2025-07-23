@@ -51,7 +51,7 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
     
     #Enrich engineering query
     yield {'type': 'progress', 'message': 'Enrich query...'}
-    query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = enrich_agent)]).message.blocks[0].text
+    query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='system', content = enrich_agent)]).message.blocks[0].text
     
     #Search experts
     yield {'type': 'progress', 'message': search_expert_text}
@@ -78,13 +78,13 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
             paper_title = retrieve_df.loc[node_id]['Title']
             yield {'type': 'progress', 'message': 'Read abstract ' + str(number_abstract) + '/' + str(total_number_abstracts)+': "' + paper_title + '"...'}
             reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
-            explanation = sim.ask_node(node_id, 'Query: ' + query + 'System prompt:', agent_text) + ' ['+ str(reference) + ']'
+            explanation = sim.ask_node(node_id, 'Query: ' + query + 'System prompt:', explain_agent) + ' ['+ str(reference) + ']'
             explanation_lst.append(explanation)
         explanations.append(explanation_lst)
     # assign the list back as the new column
     df_top["explanation"] = explanations
 
-    df_top["explanation"] = df_top["nodes"].apply(lambda node_id_lst: explain_all_nodes(sim, node_id_lst, query, explain_agent, id_mapping_df))
+    #df_top["explanation"] = df_top["nodes"].apply(lambda node_id_lst: explain_all_nodes(sim, node_id_lst, query, explain_agent, id_mapping_df))
     yield {'type': 'progress', 'message': 'Summarize author expertise...'}
 
 

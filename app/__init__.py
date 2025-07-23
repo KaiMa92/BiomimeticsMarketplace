@@ -28,9 +28,9 @@ def create_app():
     print(app.llm)
     app.embedding = load_gwdg_embedding()
     app.bio_sim = ScopusIndexManager(llm = app.llm, embedding_model = app.embedding, index_path = 'datasets/senckenberg/index')
-    app.bio_sim.top_k = 4#100
+    app.bio_sim.top_k = 10#100
     app.eng_sim = ScopusIndexManager(llm = app.llm, embedding_model = app.embedding, index_path = 'datasets/livw/index')
-    app.eng_sim.top_k = 4#100
+    app.eng_sim.top_k = 10#100
     
     # Register Blueprints or other app components
     from .routes import main
