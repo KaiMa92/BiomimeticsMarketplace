@@ -119,8 +119,8 @@ def explain_all_nodes(sim, node_id_lst, query, agent_text, id_mapping_df):
     
 
 def summarize_nodes(sim, query, summarize_agent, node_explanations, author_name):
-    query = "Query: "+ query +'\nAuthor: ' + author_name+ '\nDocument snippets: '+"\n".join(node_explanations)
-    response = sim.llm.chat([ChatMessage(role="user", content=query), ChatMessage(role='assistant', content = summarize_agent)])
+    query = "Query: "+ query +'\nAuthor: ' + author_name + '\nDocument snippets: '+"\n".join(node_explanations)
+    response = sim.llm.chat([ChatMessage(role="user", content=query), ChatMessage(role='system', content = summarize_agent)])
     summary = response.message.blocks[0].text
     return summary
 
