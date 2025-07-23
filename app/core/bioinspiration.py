@@ -21,28 +21,30 @@ def format_multiline(text):
 
 def biomimetics_marketplace(query, llm, eng_sim, bio_sim): 
     initial_query = query
-    location_filter = 'Frankfurt'
+    
     top = 2
 
 
     print('categorize')
     #Categorize querys
     yield {'type': 'progress', 'message': 'Categorizing user query...'}
-    categories = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = agent_text('agents/categorize.txt'))]).message.blocks[0].text
-    print(categories)
+    categories = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = agent_text('categorize'))]).message.blocks[0].text
+    print('Categories: ' + categories)
 
-    if "Engineering" in categories: 
-        summary_agent = agent_text('agents/bio_expert_summarize.txt')
-        explain_agent = agent_text('agents/bio_documents_explain.txt')
-        enrich_agent = agent_text('agents/enrich_eng_query.txt')
+    if "Engineer" in categories: 
+        summary_agent = agent_text('bio_expert_summarize')
+        explain_agent = agent_text('bio_documents_explain')
+        enrich_agent = agent_text('enrich_eng_query')
         search_expert_text = 'Search experts for analogous biosystems...'
+        location_filter = 'Frankfurt'
         sim = bio_sim
 
     elif "Biology" in categories:
-        summary_agent = agent_text('agents/bio_expert_summarize.txt')
-        explain_agent = agent_text('agents/bio_documents_explain.txt')
-        enrich_agent = agent_text('agents/enrich_eng_query.txt')
+        summary_agent = agent_text('bio_expert_summarize')
+        explain_agent = agent_text('bio_documents_explain')
+        enrich_agent = agent_text('enrich_eng_query')
         search_expert_text = 'Search for skilled engineers...'
+        location_filter = 'Kaiserslautern'
         sim = eng_sim
     
     else: 

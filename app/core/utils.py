@@ -8,15 +8,20 @@
 @Version: 1.0.
 """
 
-def agent_text(file_path):
+from pathlib import Path
+
+def agent_text(file_name):
+    file_path = Path('agents') / f"{file_name}.txt"
+    
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            content = file.read()
+        content = file_path.read_text(encoding='utf-8')
+        print(file_name, ': ', content)
         return content
     except FileNotFoundError:
         return f"Error: File not found at {file_path}"
     except Exception as e:
         return f"Error: {str(e)}"
+
 
 
 
