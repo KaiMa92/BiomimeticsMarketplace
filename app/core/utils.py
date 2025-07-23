@@ -7,7 +7,6 @@
 @copyright: Copyright (c) 2023 Leibniz Institut für Verbundwerkstoffe GmbH
 @Version: 1.0.
 """
-import json
 
 def agent_text(file_path):
     try:
@@ -19,12 +18,6 @@ def agent_text(file_path):
     except Exception as e:
         return f"Error: {str(e)}"
 
-def string_to_json(string): 
-    try:
-        new_json = json.loads(string.replace('json', ''))
-    except: 
-        new_json = json.loads(string)
-    return new_json
 
 
 
