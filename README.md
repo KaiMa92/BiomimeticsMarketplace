@@ -1,5 +1,5 @@
 # BiomimeticsMarketplace
-# Transferplattform für Biologie und Technik Teilvorhaben C
+## Transferplattform für Biologie und Technik Teilvorhaben C
 
 Funded by BMFTR --> Förderkennzeichen 01IO2306C
 
@@ -61,9 +61,9 @@ Additionally, you need to clone and install the `ragpipeline` module from GitLab
 #### Steps
 
 1. **Clone the repository:**
-  ```bash
-  https://github.com/KaiMa92/BiomimeticsMarketplace.git
-    ```
+```bash
+https://github.com/KaiMa92/BiomimeticsMarketplace.git
+```
 
 2. **Set API Keys:**
 Rename `.env.example` to `.env` and paste your API Keys here.
@@ -94,6 +94,7 @@ cd biomimeticsmarketplace
 python run.py
 ```
 2. **Open development server**
+
 Open developmentserver in your browser: http://127.0.0.1:5000/
 
 ## Architecture and Technology
