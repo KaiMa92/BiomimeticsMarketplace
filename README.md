@@ -70,7 +70,7 @@ Rename `.env.example` to `.env` and paste your API Keys here.
 
 3. **Clone and install the ragpipeline repository:**
 
-Clone the repository and install dependencies:
+Clone the [ragpipeline](https://gitlab.rhrk.uni-kl.de/wisskomm/ragpipeline) repository and install dependencies:
 
 ```bash
 git clone git@gitlab.rhrk.uni-kl.de:wisskomm/ragpipeline.git
@@ -85,6 +85,22 @@ python -m pip install .
 cd biomimeticsmarketplace
 pip install -r requirements.txt
 ```
+
+5. **Add directorys for agents**: 
+
+This directory hold the system prompts in plain text with .txt extension
+```bash
+cd biomimeticsmarketplace
+mkdir agents
+```
+to run the app at least the following files are mandatory: bio_documents_explain.txt, bio_expert_summarize.txt, categorize.txt, eng_documents_explain.txt, eng_expert_summarize.txt, enrich_bio_query.txt, enrich_eng_query.txt
+
+6. **Add directorys for datasets**: 
+```bash
+cd biomimeticsmarketplace
+mkdir datasets
+```
+to create datasets use the ScopusIndexManager class from ragpipeline.
 
 ### Usage
 
