@@ -7,7 +7,6 @@
 @copyright: Copyright (c) 2023 Leibniz Institut für Verbundwerkstoffe GmbH
 @Version: 1.0.
 """
-
 from pathlib import Path
 
 def agent_text(file_name):
