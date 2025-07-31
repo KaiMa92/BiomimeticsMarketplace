@@ -100,7 +100,7 @@ to run the app at least the following files are mandatory: bio_documents_explain
 cd biomimeticsmarketplace
 mkdir datasets
 ```
-to create datasets use the ScopusIndexManager class from ragpipeline.
+to create datasets use the IndexManager class from ragpipeline.
 
 ### Usage
 
