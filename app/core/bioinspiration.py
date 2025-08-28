@@ -19,11 +19,11 @@ def format_multiline(text):
     formatted_data = text.replace('\n', '<br>')
     return formatted_data
 
-def biomimetics_marketplace(query, llm, eng_sim, bio_sim): 
+def biomimetics_marketplace(query, eng_sim, bio_sim): 
     initial_query = query
     
-    top = 2
-
+    top = 3
+    llm = bio_sim.llm
 
     print('categorize')
     #Categorize querys
@@ -37,6 +37,7 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
         enrich_agent = agent_text('enrich_eng_query')
         search_expert_text = 'Search experts for analogous biosystems...'
         location_filter = 'Frankfurt'
+        location_filter = ''
         sim = bio_sim
 
     elif "Biology" in categories:
@@ -58,11 +59,13 @@ def biomimetics_marketplace(query, llm, eng_sim, bio_sim):
     #Search experts
     yield {'type': 'progress', 'message': search_expert_text}
     retrieve_df = sim.retrieve(query)
+    print(retrieve_df)
     yield {'type': 'progress', 'message': 'Filter experts by location...'}
     filtered_df = filter_by_keyword(retrieve_df, location_filter)
     yield {'type': 'progress', 'message': 'Rank authors...'}
     ranked_authors_df = author_ranking(filtered_df)    
     df_top = ranked_authors_df.head(top)
+    print(df_top)
     yield {'type': 'progress', 'message': 'Make IEEE references for sources...'}
     df_top['sources'] = df_top.apply(get_citations, args=(retrieve_df,), axis=1)
     unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))

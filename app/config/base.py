@@ -8,12 +8,12 @@
 @Version: 1.0.
 """
 
-import os
-from dotenv import load_dotenv
+#import os
+#from dotenv import load_dotenv
 
 # Load environment variables from .env file
 #dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-dotenv = load_dotenv()
+#dotenv = load_dotenv()
 
 class Config:
     """Base configuration with common settings."""
@@ -21,4 +21,4 @@ class Config:
     TESTING = False
 
     # OpenAI Configuration
-    GWDG_API_KEY = os.getenv("GWDG_API_KEY")
+    #GWDG_API_KEY = os.getenv("GWDG_API_KEY")

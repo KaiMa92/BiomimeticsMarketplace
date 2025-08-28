@@ -80,3 +80,9 @@ search_query = generate_search_query(include_df, exclude_df = None)
 results = search_openalex(search_query)
 
 
+#############################################################
+
+
+
+
+
