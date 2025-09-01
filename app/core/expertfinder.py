@@ -12,6 +12,9 @@ Created on Wed Feb 26 14:49:27 2025
 import pandas as pd
 from llama_index.core.llms import ChatMessage
 from app.core.utils import agent_text
+from pathlib import Path
+from ragpipeline.indexmanager.csvindexmanager import OpenalexIndexManager
+
 
 def filter_by_keyword(df, filter_keyword):
     # Initialize an empty list to store the Frankfurt authors for each row
@@ -20,26 +23,20 @@ def filter_by_keyword(df, filter_keyword):
 
     # Loop through each row of the dataframe
     for index, row in df.iterrows():
-        try: 
-            # Extract the affiliations and full names for the current row
-            awa = row['Authors with affiliations'].split(';')
-            authors_fullname_lst = row['Author full names'].split(';')
-    
-            # List comprehension to find the indices of Frankfurt authors
-            authors_idx = [i for i, awa in enumerate(awa) if filter_keyword in awa]
-    
-            # Create the Frankfurt authors list using indices
-            authors = [authors_fullname_lst[n] for n in authors_idx]
-            affiliations = [awa[n].split(',', 1)[1].strip() for n in authors_idx]
-    
-            # Join the Frankfurt authors into a single string and append to the list
-            authors_column.append('; '.join(authors))
-            affiliations_column.append('; '.join(affiliations))
-        except: 
-            print(index)
-            print(authors_idx)
-            print(authors_fullname_lst)
-            print(awa)
+        # Extract the affiliations and full names for the current row
+        awa = row['Authors with affiliations'].split(';')
+        authors_fullname_lst = row['Author full names'].split(';')
+
+        # List comprehension to find the indices of Frankfurt authors
+        authors_idx = [i for i, awa in enumerate(awa) if filter_keyword in awa]
+
+        # Create the Frankfurt authors list using indices
+        authors = [authors_fullname_lst[n] for n in authors_idx]
+        affiliations = [awa[n].split(',', 1)[1].strip() for n in authors_idx]
+
+        # Join the Frankfurt authors into a single string and append to the list
+        authors_column.append('; '.join(authors))
+        affiliations_column.append('; '.join(affiliations))
 
     # Add the Frankfurt authors as a new column in the dataframe
     df['filtered_authors'] = authors_column
@@ -60,24 +57,28 @@ def author_ranking(df):
     # 2) Split both columns into lists
     authors_scores[author_column] = authors_scores[author_column].str.split(';')
     authors_scores[aff_column]    = authors_scores[aff_column].str.split(';')
-
-    # 3) Explode both at once (pandas ≥1.3.0)
-    authors_scores = authors_scores.explode([author_column, aff_column]).reset_index(drop=True)
+    
+    authors_scores['author_publication_rank'] = authors_scores[author_column].apply(lambda x: list(range(1, len(x)+1)))
+    authors_scores = authors_scores.explode([author_column, aff_column, 'author_publication_rank']).reset_index(drop=True)
+    
 
     # 4) Strip whitespace
     authors_scores[author_column] = authors_scores[author_column].str.strip()
     authors_scores[aff_column]    = authors_scores[aff_column].str.strip()
+    
+    authors_scores['relative_score'] = authors_scores['score']/(authors_scores['author_publication_rank']**1.5)
 
     # 5) Drop empty or missing authors
     mask = authors_scores[author_column].notna() & (authors_scores[author_column] != '')
     authors_scores = authors_scores[mask]
+    
 
     # 6) Group by author, sum scores, count papers, collect nodes & unique affiliations
     author_rank = (
         authors_scores
         .groupby(author_column)
         .agg(
-            total_score  = (score_column, 'sum'),
+            total_score  = ('relative_score', 'sum'),
             count        = (score_column, 'size'),
             nodes        = ('nodes', 'unique'),
             affiliations = (aff_column, 'unique')
@@ -108,10 +109,9 @@ def get_citations(row, retrieve_df):
         citations.append(format_ieee_citation(retrieve_df, node_id, i))
     return citations
 
-def explain_all_nodes(sim, node_id_lst, query, agent_text, id_mapping_df):
+def explain_all_nodes(sim, node_id_lst, query, agent_text):
     explanation_lst = []
-    for node_id in node_id_lst: 
-        reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
+    for reference, node_id in enumerate(node_id_lst): 
         query = 'Query: ' + query + 'System prompt:'
         explanation = sim.ask_node(node_id, query, agent_text) + ' ['+ str(reference) + ']'
         explanation_lst.append(explanation)
@@ -119,10 +119,26 @@ def explain_all_nodes(sim, node_id_lst, query, agent_text, id_mapping_df):
     
 
 def summarize_nodes(sim, query, summarize_agent, node_explanations, author_name):
+    snippet = '\n'.join(node_explanations)
+    system_msg = ChatMessage(role="system", content=summarize_agent)
+    user_msg = ChatMessage(
+        role="user",
+        content=(
+            f"QUERY: {query}\n"
+            f"AUTHOR: {author_name}\n"
+            f"DOCUMENT SNIPPET:\n{snippet}"
+        ),
+    )
+
+    resp = sim.llm.chat([system_msg, user_msg])
+    text = resp.message.content
+    return text
+
     query = "Query: "+ query +'\nAuthor: ' + author_name + '\nDocument snippets: '+"\n".join(node_explanations)
-    response = sim.llm.chat([ChatMessage(role="user", content=query), ChatMessage(role='system', content = summarize_agent)])
+    response = sim.llm.chat([ChatMessage(role="user", content=query), ChatMessage(role='assistant', content = summarize_agent)])
     summary = response.message.blocks[0].text
     return summary
+
 
 
 def report_string(query, df_top, id_mapping_df):
@@ -151,11 +167,11 @@ def report_string(query, df_top, id_mapping_df):
 def save_html(string, path): 
     with open(path, "w", encoding= "utf-8") as html_file:
         html_file.write(string)
-
+        
 def find_experts(sim, query_text, explain_agent, summary_agent, location_filter, top): 
     print('retrieve')
     retrieve_df = sim.retrieve(query_text)
-    print('filter')
+    #print('filter')
     filtered_df = filter_by_keyword(retrieve_df, location_filter)
     print('rank authors')
     ranked_authors_df = author_ranking(filtered_df)    
@@ -165,11 +181,11 @@ def find_experts(sim, query_text, explain_agent, summary_agent, location_filter,
     # Apply the function to generate citations for each node in the list
     df_top['sources'] = df_top.apply(get_citations, args=(retrieve_df,), axis=1)
     
-    unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
-    id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
+    #unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
+    #id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
     
     print('explain')
-    df_top["explanation"] = df_top["nodes"].apply(lambda node_id_lst: explain_all_nodes(sim, node_id_lst, query_text, explain_agent, id_mapping_df))
+    df_top["explanation"] = df_top["nodes"].apply(lambda node_id_lst: explain_all_nodes(sim, node_id_lst, query_text, explain_agent))
     print('summarize')
     df_top["summary"] = df_top.apply(lambda row: summarize_nodes(sim, query_text, summary_agent, row["explanation"], row["author_name"]), axis=1)
     df_top['affiliations'] = df_top['affiliations'].str[0]

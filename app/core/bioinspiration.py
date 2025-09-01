@@ -54,7 +54,7 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
     
     #Enrich engineering query
     yield {'type': 'progress', 'message': 'Enrich query...'}
-    query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='system', content = enrich_agent)]).message.blocks[0].text
+    query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = enrich_agent)]).message.blocks[0].text
     
     #Search experts
     yield {'type': 'progress', 'message': search_expert_text}
@@ -64,12 +64,14 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
     filtered_df = filter_by_keyword(retrieve_df, location_filter)
     yield {'type': 'progress', 'message': 'Rank authors...'}
     ranked_authors_df = author_ranking(filtered_df)    
+    print('scores: ', ranked_authors_df['total_score'])
     df_top = ranked_authors_df.head(top)
     print(df_top)
     yield {'type': 'progress', 'message': 'Make IEEE references for sources...'}
     df_top['sources'] = df_top.apply(get_citations, args=(retrieve_df,), axis=1)
-    unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
-    id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
+    #unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
+    #id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
+    #print(id_mapping_df)
 
     yield {'type': 'progress', 'message': 'Read abstracts...'}
     explanations = []
@@ -78,12 +80,14 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
     number_abstract = 0
     for node_id_lst in df_top["nodes"]:
         explanation_lst = []
-        for node_id in node_id_lst: 
+        for reference, node_id in enumerate(node_id_lst): 
             number_abstract += 1
             paper_title = retrieve_df.loc[node_id]['Title']
             yield {'type': 'progress', 'message': 'Read abstract ' + str(number_abstract) + '/' + str(total_number_abstracts)+': "' + paper_title + '"...'}
-            reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
-            explanation = '['+ str(reference) + '] ' + sim.ask_node(node_id, 'Query: ' + query, explain_agent)
+            #reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
+            print('Reference: ', reference+1)
+            explanation = '['+ str(reference+1) + '] ' + sim.ask_node(node_id, 'Query: ' + query, explain_agent)
+            print('Explanation: ', explanation)
             explanation_lst.append(explanation)
         explanations.append(explanation_lst)
     # assign the list back as the new column
