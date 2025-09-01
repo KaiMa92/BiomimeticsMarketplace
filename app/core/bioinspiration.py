@@ -24,11 +24,11 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
     
     top = 3
     llm = bio_sim.llm
-
-    print('categorize')
+    #print('First Index: ', str(list(bio_sim.metadata.index)[0]))
+    #print('categorize')
     #Categorize querys
     yield {'type': 'progress', 'message': 'Categorizing user query...'}
-    categories = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = agent_text('categorize'))]).message.blocks[0].text
+    categories = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='system', content = agent_text('categorize'))]).message.blocks[0].text
     print('Categories: ' + categories)
 
     if "Engineer" in categories: 
@@ -36,17 +36,18 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
         explain_agent = agent_text('bio_documents_explain')
         enrich_agent = agent_text('enrich_eng_query')
         search_expert_text = 'Search experts for analogous biosystems...'
-        location_filter = 'Frankfurt'
+        #location_filter = 'Frankfurt'
         location_filter = ''
         sim = bio_sim
 
     elif "Biology" in categories:
-        summary_agent = agent_text('bio_expert_summarize')
-        explain_agent = agent_text('bio_documents_explain')
-        enrich_agent = agent_text('enrich_eng_query')
-        search_expert_text = 'Search for skilled engineers...'
-        location_filter = 'Kaiserslautern'
-        sim = eng_sim
+        pass
+        #summary_agent = agent_text('bio_expert_summarize')
+        #explain_agent = agent_text('bio_documents_explain')
+        #enrich_agent = agent_text('enrich_eng_query')
+        #search_expert_text = 'Search for skilled engineers...'
+        #location_filter = 'Kaiserslautern'
+        #sim = eng_sim
     
     else: 
         print('Should not land here')
@@ -54,19 +55,19 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
     
     #Enrich engineering query
     yield {'type': 'progress', 'message': 'Enrich query...'}
-    query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='assistant', content = enrich_agent)]).message.blocks[0].text
+    query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='system', content = enrich_agent)]).message.blocks[0].text
     
     #Search experts
     yield {'type': 'progress', 'message': search_expert_text}
     retrieve_df = sim.retrieve(query)
-    print(retrieve_df)
+    #print(retrieve_df)
     yield {'type': 'progress', 'message': 'Filter experts by location...'}
     filtered_df = filter_by_keyword(retrieve_df, location_filter)
     yield {'type': 'progress', 'message': 'Rank authors...'}
     ranked_authors_df = author_ranking(filtered_df)    
-    print('scores: ', ranked_authors_df['total_score'])
+    #print('scores: ', ranked_authors_df['total_score'])
     df_top = ranked_authors_df.head(top)
-    print(df_top)
+    #print(df_top)
     yield {'type': 'progress', 'message': 'Make IEEE references for sources...'}
     df_top['sources'] = df_top.apply(get_citations, args=(retrieve_df,), axis=1)
     #unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
@@ -85,9 +86,9 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
             paper_title = retrieve_df.loc[node_id]['Title']
             yield {'type': 'progress', 'message': 'Read abstract ' + str(number_abstract) + '/' + str(total_number_abstracts)+': "' + paper_title + '"...'}
             #reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
-            print('Reference: ', reference+1)
+            #print('Reference: ', reference+1)
             explanation = '['+ str(reference+1) + '] ' + sim.ask_node(node_id, 'Query: ' + query, explain_agent)
-            print('Explanation: ', explanation)
+            #print('Explanation: ', explanation)
             explanation_lst.append(explanation)
         explanations.append(explanation_lst)
     # assign the list back as the new column

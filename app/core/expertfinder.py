@@ -21,14 +21,18 @@ def filter_by_keyword(df, filter_keyword):
     authors_column = []
     affiliations_column = []
 
-    # Loop through each row of the dataframe
+    # Loop over each row of the dataframe
     for index, row in df.iterrows():
+        print('DOI: ',row['DOI'])
         # Extract the affiliations and full names for the current row
         awa = row['Authors with affiliations'].split(';')
+        print('awa: ', awa)
         authors_fullname_lst = row['Author full names'].split(';')
+        print('authors_fullname_lst: ', authors_fullname_lst)
 
         # List comprehension to find the indices of Frankfurt authors
         authors_idx = [i for i, awa in enumerate(awa) if filter_keyword in awa]
+        print('authors_idx: ', authors_idx)
 
         # Create the Frankfurt authors list using indices
         authors = [authors_fullname_lst[n] for n in authors_idx]

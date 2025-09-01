@@ -9,7 +9,7 @@
 """
 
 from flask import Flask
-from ragpipeline.indexmanager.csvindexmanager import OpenalexIndexManager, ScopusIndexManager
+from ragpipeline.indexmanager.csvindexmanager import OpenalexIndexManager
 
 def create_app():
     app = Flask(__name__)
