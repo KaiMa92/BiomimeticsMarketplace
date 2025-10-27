@@ -36,18 +36,18 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
         explain_agent = agent_text('bio_documents_explain')
         enrich_agent = agent_text('enrich_eng_query')
         search_expert_text = 'Search experts for analogous biosystems...'
-        #location_filter = 'Frankfurt'
-        location_filter = ''
+        location_filter = 'Frankfurt'
+        #location_filter = ''
         sim = bio_sim
 
     elif "Biology" in categories:
         pass
-        #summary_agent = agent_text('bio_expert_summarize')
-        #explain_agent = agent_text('bio_documents_explain')
-        #enrich_agent = agent_text('enrich_eng_query')
-        #search_expert_text = 'Search for skilled engineers...'
-        #location_filter = 'Kaiserslautern'
-        #sim = eng_sim
+        summary_agent = agent_text('bio_expert_summarize')
+        explain_agent = agent_text('bio_documents_explain')
+        enrich_agent = agent_text('enrich_eng_query')
+        search_expert_text = 'Search for skilled engineers...'
+        location_filter = 'Kaiserslautern'
+        sim = eng_sim
     
     else: 
         print('Should not land here')

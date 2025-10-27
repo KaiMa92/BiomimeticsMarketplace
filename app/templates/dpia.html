@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Impressum</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+
+<h1>Daten­schutz‑Folgenabschätzung (DPIA)</h1>
+
+<h2>1. Allgemeine Angaben</h2>
+<table>
+    <tbody>
+        <tr><th>Projekt</th><td>Transferplattform für Biologie und Technik (TVH:C) – Förderkennzeichen 01 IO 2306 C</td></tr>
+        <tr><th>Verantwortlicher</th><td>Leibniz‑Institut für Verbundwerkstoffe GmbH, Erwin‑Schrödinger‑Straße 58, 67663 Kaiserslautern</td></tr>
+        <tr><th>Datenschutz‑Beauftragter</th><td>Dr.-Ing. J. Blaurock, dsb@ivw.uni‑kl.de</td></tr>
+        <tr><th>Datum der Erstellung</th><td>17. September 2025</td></tr>
+        <tr><th>Version</th><td>1.0</td></tr>
+    </tbody>
+</table>
+
+<h2>2. Zweck und Beschreibung der Verarbeitung</h2>
+<ul>
+    <li><strong>Zweck:</strong> Bereitstellung eines webbasierten Chat‑Bots, der Nutzer‑Fragestellungen zu biotechnologischen Themen automatisiert beantwortet.</li>
+    <li><strong>Verarbeitete Daten</strong>
+        <ul>
+            <li>IP‑Adresse (zur Session‑Verwaltung und Sicherheits‑Monitoring)</li>
+            <li>Freitext‑Fragestellung (max. 500 Zeichen)</li>
+            <li>Technische Log‑Einträge (Zeitstempel, HTTP‑Status, User‑Agent)</li>
+        </ul>
+    </li>
+    <li><strong>Speicherort</strong> – Verarbeitung erfolgt auf den Servern der Gesellschaft für wissenschaftliche Datenverarbeitung mbH (GWDG) in Deutschland.</li>
+    <li><strong>Speicherdauer</strong>
+        <ul>
+            <li>IP‑Adresse: max. 24 Stunden nach Session‑Ende</li>
+            <li>Freitext‑Fragestellung: nur im RAM bis zur Antwortgenerierung (max. 5 Minuten)</li>
+            <li>Log‑Einträge: 30 Tage</li>
+        </ul>
+    </li>
+    <li><strong>Rechtsgrundlage</strong> – Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).</li>
+</ul>
+
+<h2>3. Risiko‑Analyse</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Risiko</th>
+            <th>Beschreibung</th>
+            <th>Wahrscheinlichkeit</th>
+            <th>Schwere</th>
+            <th>Risikolevel (W × S)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1. Identitäts‑Re‑Identifizierung</td>
+            <td>Kombination von IP‑Adresse und Fragestellung könnte Rückschlüsse auf die Person zulassen.</td>
+            <td>Mittel</td>
+            <td>Hoch</td>
+            <td>Mittel‑Hoch</td>
+        </tr>
+        <tr>
+            <td>2. Unbeabsichtigte Speicherung</td>
+            <td>Session‑Daten werden nicht innerhalb der vorgesehenen Frist gelöscht.</td>
+            <td>Niedrig</td>
+            <td>Mittel</td>
+            <td>Niedrig‑Mittel</td>
+        </tr>
+        <tr>
+            <td>3. Missbrauch der KI‑Ausgabe</td>
+            <td>Nutzer vertrauen ausschließlich auf die generierten Antworten.</td>
+            <td>Hoch</td>
+            <td>Mittel</td>
+            <td>Mittel</td>
+        </tr>
+        <tr>
+            <td>4. Technische Angriffe (Man‑in‑the‑Middle)</td>
+            <td>Datenübertragung nicht verschlüsselt.</td>
+            <td>Hoch</td>
+            <td>Hoch</td>
+            <td>Hoch</td>
+        </tr>
+        <tr>
+            <td>5. Dokumentations‑Lücken</td>
+            <td>Fehlende Nachweise über Löschvorgänge.</td>
+            <td>Mittel</td>
+            <td>Mittel</td>
+            <td>Mittel</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>4. Maßnahmen zur Risikominimierung</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Risiko</th>
+            <th>Umgesetzte / geplante Maßnahmen</th>
+            <th>Verantwortlicher</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Identitäts‑Re‑Identifizierung</td>
+            <td>
+                <ul>
+                    <li>IP‑Adresse wird nach 24 h maskiert (letzte 3 Oktette werden entfernt).</li>
+                    <li>Log‑Einträge enthalten keine Fragestellung.</li>
+                </ul>
+            </td>
+            <td>Backend‑Team</td>
+            <td>Implementiert</td>
+        </tr>
+        <tr>
+            <td>Unbeabsichtigte Speicherung</td>
+            <td>
+                <ul>
+                    <li>Automatischer Cron‑Job löscht Session‑Einträge nach 24 h.</li>
+                    <li>RAM‑Cache wird nach Antwort sofort geleert.</li>
+                </ul>
+            </td>
+            <td>System‑Admin</td>
+            <td>Implementiert</td>
+        </tr>
+        <tr>
+            <td>Missbrauch der KI‑Ausgabe</td>
+            <td>
+                <ul>
+                    <li>Hinweis im UI: „KI‑Antworten sind nicht redaktionell geprüft und dürfen nicht als alleinige Entscheidungsgrundlage verwendet werden.“</li>
+                    <li>Disclaimer im Impressum und in der Datenschutzerklärung.</li>
+                </ul>
+            </td>
+            <td>Produkt‑Team</td>
+            <td>Implementiert</td>
+        </tr>
+        <tr>
+            <td>Technische Angriffe</td>
+            <td>
+                <ul>
+                    <li>Einführung von TLS 1.3 für die gesamte Kommunikation zwischen Front‑End und GWDG‑Server (geplant bis 30. Nov 2025).</li>
+                    <li>Quartalsweise Pen‑Tests.</li>
+                </ul>
+            </td>
+            <td>IT‑Security‑Team</td>
+            <td>Geplant</td>
+        </tr>
+        <tr>
+            <td>Dokumentations‑Lücken</td>
+            <td>
+                <ul>
+                    <li>Audit‑Log (unveränderlich) protokolliert alle Löschvorgänge.</li>
+                    <li>Jährliche Review der DPIA durch den Datenschutz‑Beauftragten.</li>
+                </ul>
+            </td>
+            <td>Datenschutz‑Beauftragter</td>
+            <td>Implementiert</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>5. Ergebnis der Risiko‑Bewertung</h2>
+<table>
+    <thead>
+        <tr><th>Risiko</th><th>Rest‑Risiko nach Maßnahmen</th><th>Akzeptanz</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Identitäts‑Re‑Identifizierung</td><td>Mittel (IP‑Maskierung)</td><td>Akzeptabel</td></tr>
+        <tr><td>Unbeabsichtigte Speicherung</td><td>Niedrig</td><td>Akzeptabel</td></tr>
+        <tr><td>Missbrauch der KI‑Ausgabe</td><td>Mittel (Hinweis & Disclaimer)</td><td>Akzeptabel</td></tr>
+        <tr><td>Technische Angriffe</td><td>Hoch (bis TLS‑Implementierung)</td><td>**Nicht akzeptabel** – TLS muss bis 30. Nov 2025 umgesetzt werden.</td></tr>
+        <tr><td>Dokumentations‑Lücken</td><td>Niedrig</td><td>Akzeptabel</td></tr>
+    </tbody>
+</table>
+
+<p>Gesamtbewertung: Nach Umsetzung der TLS‑Verschlüsselung und der übrigen Maßnahmen ist das verbleibende Risiko als <strong>akzeptabel</strong> einzustufen.</p>
+
+<h2>6. Weiteres Vorgehen / Review</h2>
+<ul>
+    <li><strong>Umsetzung TLS:</strong> bis 30. Nov 2025.</li>
+    <li><strong>Jährliche DPIA‑Überprüfung:</strong> Durch den Datenschutz‑Beauftragten.</li>
+    <li><strong>Monitoring:</strong> Automatisierte Alerts bei Fehlfunktionen des Cron‑Jobs oder bei ungewöhnlichen Zugriffsmustern.</li>
+</ul>
+
+<h2>7. Dokumentation & Nachweis</h2>
+<p>Die vollständige DPIA‑Dokumentation (inkl. technischer Prüfberichte, Pen‑Test‑Ergebnisse und Auftrags‑Verarbeitungsvertrag mit GWDG) steht hier zum Download bereit:</p>
+<p><a href="https://example.com/dpia_tvhc.pdf" target="_blank" rel="noopener">DPIA‑Dokumentation (PDF)</a></p>
+
+<hr>
+
+<div class="footer">
+    Dieses Dokument wurde zuletzt am <strong>17. September 2025</strong> aktualisiert.<br>
+    © Leibniz‑Institut für Verbundwerkstoffe GmbH – Alle Rechte vorbehalten.
+</div>
+
+</body>
+</html>
