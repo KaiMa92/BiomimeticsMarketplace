@@ -15,14 +15,15 @@
         </div>
 
         <main>
-            <!-- {% if error_message %}
-            <p>{{ error_message }}</p>
-            {% endif %}-->
             
             <form id="searchForm" class="search-form">
                 <input type="text" id="search" class="search-input" name="query" autocomplete="off" placeholder="Type your query here..." required>
                 <button type="submit" id="startButton" class="techy-button">Search</button>
             </form>
+
+            {% if error_message %}
+            <p class="error-message">{{ error_message }}</p>
+            {% endif %}
 
             <div id="progress-container" style="display:none;">
                 <div id="progress-circle"></div>

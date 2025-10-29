@@ -41,17 +41,29 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
         sim = bio_sim
 
     elif "Biology" in categories:
-        pass
-        summary_agent = agent_text('bio_expert_summarize')
-        explain_agent = agent_text('bio_documents_explain')
-        enrich_agent = agent_text('enrich_eng_query')
+        summary_agent = agent_text('eng_expert_summarize')
+        explain_agent = agent_text('eng_documents_explain')
+        enrich_agent = agent_text('enrich_bio_query')
         search_expert_text = 'Search for skilled engineers...'
         location_filter = 'Kaiserslautern'
         sim = eng_sim
+
+    elif "Product Idea" in categories:
+        summary_agent = agent_text('product_expert_summarize')
+        explain_agent = agent_text('product_documents_explain')
+        enrich_agent = agent_text('enrich_product_query')
+        search_expert_text = 'Search experts for analogous biosystems...'
+        location_filter = 'Kaiserslautern'
+        sim = bio_sim
     
     else: 
         print('Should not land here')
-        pass #error message necessary
+        # Signal the frontend to redirect back to index with a helpful message
+        yield {
+            'type': 'redirect',
+            'url': '/?error=Could not categorize your query. Please refine and try again.'
+        }
+        return
     
     #Enrich engineering query
     yield {'type': 'progress', 'message': 'Enrich query...'}

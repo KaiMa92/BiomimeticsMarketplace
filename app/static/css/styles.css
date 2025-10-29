@@ -229,6 +229,13 @@ p {
     margin-top: 10px;
 }
 
+/* Error message styling */
+.error-message {
+    color: #ff9aa2; /* pastel red */
+    text-align: center;
+    margin: 10px auto 0 auto;
+}
+
 .slick-prev, .slick-next {
     background-color: #7ed957;
     color: #1f2130;

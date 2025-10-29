@@ -18,7 +18,9 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html', error_message=session.get('error_message', None))
+    # Prefer explicit error passed via query param; fallback to any session error
+    error = request.args.get('error') or session.get('error_message', None)
+    return render_template('index.html', error_message=error)
 
 @main.route('/start')
 def start():
@@ -32,6 +34,10 @@ def start():
         for output in biomimetics_marketplace(query, current_app.eng_sim, current_app.bio_sim):
             if output['type'] == 'progress':
                 yield f"data: {output['message']}\n\n"
+            elif output['type'] == 'redirect':
+                # Stream a redirect event that the frontend can handle
+                yield f"event: redirect\ndata: {output['url']}\n\n"
+                return
             elif output['type'] == 'results':
                 result_dct = output['data']
                 # Persist json on harddrive

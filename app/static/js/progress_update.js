@@ -1,6 +1,12 @@
 document.getElementById('searchForm').onsubmit = function(event) {
     event.preventDefault();
 
+    // Clear any previous error message if present
+    var errEl = document.querySelector('.error-message');
+    if (errEl) {
+        errEl.remove();
+    }
+
     var userInput = document.getElementById('search').value;
     var source = new EventSource('/start?query=' + encodeURIComponent(userInput));
 
@@ -28,6 +34,14 @@ document.getElementById('searchForm').onsubmit = function(event) {
         // Hide the progress container and redirect to results page
         progressContainer.style.display = 'none';
         window.location.href = '/results';
+    });
+
+    // Handle server-sent redirect events (e.g., invalid category)
+    source.addEventListener('redirect', function(event) {
+        console.log('Received redirect event to:', event.data);
+        source.close();
+        progressContainer.style.display = 'none';
+        window.location.href = event.data || '/';
     });
 
     source.onerror = function(err) {
