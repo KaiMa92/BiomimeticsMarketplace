@@ -31,24 +31,7 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
     categories = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='system', content = agent_text('categorize'))]).message.blocks[0].text
     print('Categories: ' + categories)
 
-    if "Engineer" in categories: 
-        summary_agent = agent_text('bio_expert_summarize')
-        explain_agent = agent_text('bio_documents_explain')
-        enrich_agent = agent_text('enrich_eng_query')
-        search_expert_text = 'Search experts for analogous biosystems...'
-        location_filter = 'Frankfurt'
-        #location_filter = ''
-        sim = bio_sim
-
-    elif "Biology" in categories:
-        summary_agent = agent_text('eng_expert_summarize')
-        explain_agent = agent_text('eng_documents_explain')
-        enrich_agent = agent_text('enrich_bio_query')
-        search_expert_text = 'Search for skilled engineers...'
-        location_filter = 'Kaiserslautern'
-        sim = eng_sim
-
-    elif "Product Idea" in categories:
+    if "Product Idea" in categories:
         summary_agent = agent_text('product_expert_summarize')
         explain_agent = agent_text('product_documents_explain')
         enrich_agent = agent_text('enrich_product_query')
@@ -56,85 +39,104 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
         location_filter = 'Kaiserslautern'
         sim = bio_sim
     
-    else: 
-        print('Should not land here')
-        # Signal the frontend to redirect back to index with a helpful message
-        yield {
-            'type': 'redirect',
-            'url': '/?error=Could not categorize your query. Please refine and try again.'
-        }
-        return
-    
-    #Enrich engineering query
-    yield {'type': 'progress', 'message': 'Enrich query...'}
-    query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='system', content = enrich_agent)]).message.blocks[0].text
-    
-    #Search experts
-    yield {'type': 'progress', 'message': search_expert_text}
-    retrieve_df = sim.retrieve(query)
-    #print(retrieve_df)
-    yield {'type': 'progress', 'message': 'Filter experts by location...'}
-    filtered_df = filter_by_keyword(retrieve_df, location_filter)
-    yield {'type': 'progress', 'message': 'Rank authors...'}
-    ranked_authors_df = author_ranking(filtered_df)    
-    #print('scores: ', ranked_authors_df['total_score'])
-    df_top = ranked_authors_df.head(top)
-    #print(df_top)
-    yield {'type': 'progress', 'message': 'Make IEEE references for sources...'}
-    df_top['sources'] = df_top.apply(get_citations, args=(retrieve_df,), axis=1)
-    #unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
-    #id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
-    #print(id_mapping_df)
+    else:
 
-    yield {'type': 'progress', 'message': 'Read abstracts...'}
-    explanations = []
-    # iterate through the values in the "nodes" column
-    total_number_abstracts = sum(len(node_id_lst) for node_id_lst in df_top["nodes"])
-    number_abstract = 0
-    for node_id_lst in df_top["nodes"]:
-        explanation_lst = []
-        for reference, node_id in enumerate(node_id_lst): 
-            number_abstract += 1
-            paper_title = retrieve_df.loc[node_id]['Title']
-            yield {'type': 'progress', 'message': 'Read abstract ' + str(number_abstract) + '/' + str(total_number_abstracts)+': "' + paper_title + '"...'}
-            #reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
-            #print('Reference: ', reference+1)
-            explanation = '['+ str(reference+1) + '] ' + sim.ask_node(node_id, 'Query: ' + query, explain_agent)
-            #print('Explanation: ', explanation)
-            explanation_lst.append(explanation)
-        explanations.append(explanation_lst)
-    # assign the list back as the new column
-    df_top["explanation"] = explanations
+        if "Engineer" in categories: 
+            summary_agent = agent_text('bio_expert_summarize')
+            explain_agent = agent_text('bio_documents_explain')
+            enrich_agent = agent_text('enrich_eng_query')
+            search_expert_text = 'Search experts for analogous biosystems...'
+            location_filter = 'Frankfurt'
+            #location_filter = ''
+            sim = bio_sim
 
-    yield {'type': 'progress', 'message': 'Summarize author expertise...'}
-    summaries = []
-    for _, row in df_top.iterrows():
-        yield {'type': 'progress', 'message': 'Summarize work of ' + row['author_name'] + '...'}
-        summary = summarize_nodes(
-            sim,
-            initial_query,
-            summary_agent,
-            row["explanation"],
-            row["author_name"]
+        elif "Biology" in categories:
+            summary_agent = agent_text('eng_expert_summarize')
+            explain_agent = agent_text('eng_documents_explain')
+            enrich_agent = agent_text('enrich_bio_query')
+            search_expert_text = 'Search for skilled engineers...'
+            location_filter = 'Kaiserslautern'
+            sim = eng_sim
+
+        else: 
+            print('Should not land here')
+            # Signal the frontend to redirect back to index with a helpful message
+            yield {
+                'type': 'redirect',
+                'url': '/?error=Could not categorize your query. Please refine and try again.'
+            }
+            return
+        
+        #Enrich engineering query
+        yield {'type': 'progress', 'message': 'Enrich query...'}
+        query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='system', content = enrich_agent)]).message.blocks[0].text
+        
+        #Search experts
+        yield {'type': 'progress', 'message': search_expert_text}
+        retrieve_df = sim.retrieve(query)
+        #print(retrieve_df)
+        yield {'type': 'progress', 'message': 'Filter experts by location...'}
+        filtered_df = filter_by_keyword(retrieve_df, location_filter)
+        yield {'type': 'progress', 'message': 'Rank authors...'}
+        ranked_authors_df = author_ranking(filtered_df)    
+        #print('scores: ', ranked_authors_df['total_score'])
+        df_top = ranked_authors_df.head(top)
+        #print(df_top)
+        yield {'type': 'progress', 'message': 'Make IEEE references for sources...'}
+        df_top['sources'] = df_top.apply(get_citations, args=(retrieve_df,), axis=1)
+        #unique_ids = sorted(set(id for sublist in df_top["nodes"] for id in sublist))
+        #id_mapping_df = pd.DataFrame({"node_id": unique_ids, "reference": range(1, len(unique_ids) + 1)})
+        #print(id_mapping_df)
+
+        yield {'type': 'progress', 'message': 'Read abstracts...'}
+        explanations = []
+        # iterate through the values in the "nodes" column
+        total_number_abstracts = sum(len(node_id_lst) for node_id_lst in df_top["nodes"])
+        number_abstract = 0
+        for node_id_lst in df_top["nodes"]:
+            explanation_lst = []
+            for reference, node_id in enumerate(node_id_lst): 
+                number_abstract += 1
+                paper_title = retrieve_df.loc[node_id]['Title']
+                yield {'type': 'progress', 'message': 'Read abstract ' + str(number_abstract) + '/' + str(total_number_abstracts)+': "' + paper_title + '"...'}
+                #reference = id_mapping_df.loc[id_mapping_df['node_id']== node_id, 'reference'].values[0]
+                #print('Reference: ', reference+1)
+                explanation = '['+ str(reference+1) + '] ' + sim.ask_node(node_id, 'Query: ' + query, explain_agent)
+                #print('Explanation: ', explanation)
+                explanation_lst.append(explanation)
+            explanations.append(explanation_lst)
+        # assign the list back as the new column
+        df_top["explanation"] = explanations
+
+        yield {'type': 'progress', 'message': 'Summarize author expertise...'}
+        summaries = []
+        for _, row in df_top.iterrows():
+            yield {'type': 'progress', 'message': 'Summarize work of ' + row['author_name'] + '...'}
+            summary = summarize_nodes(
+                sim,
+                initial_query,
+                summary_agent,
+                row["explanation"],
+                row["author_name"]
+            )
+            summaries.append(summary)
+        df_top["summary"] = summaries
+
+        df_top['affiliations'] = df_top['affiliations'].str[0]
+        yield {'type': 'progress', 'message': 'Transform output...'}
+        
+        records = (
+            df_top
+            .sort_values("ranking")
+            .loc[:, ["author_name", "summary", "affiliations", "sources"]]
+            .to_dict(orient="records")
         )
-        summaries.append(summary)
-    df_top["summary"] = summaries
-
-    df_top['affiliations'] = df_top['affiliations'].str[0]
-    yield {'type': 'progress', 'message': 'Transform output...'}
-    
-    records = (
-        df_top
-        .sort_values("ranking")
-        .loc[:, ["author_name", "summary", "affiliations", "sources"]]
-        .to_dict(orient="records")
-    )
-    
-    dct = {'Query': initial_query, 
-        'Location': location_filter, 
-        'Authors': records}
-    print(dct)
-    yield {'type': 'results', 'data': dct}
+        
+        dct = {'Query': initial_query, 
+            'Location': location_filter, 
+            'Authors': records}
+        print(dct)
+        yield {'type': 'results', 'data': dct}
 
 
 def biomimetics_marketplace_dummy(query, llm, eng_sim, bio_sim):
