@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Impressum</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>a { color: #7ed957; }</style>
 </head>
 
 <body>
@@ -189,6 +190,14 @@
 <p><a href="https://example.com/dpia_tvhc.pdf" target="_blank" rel="noopener">DPIA‑Dokumentation (PDF)</a></p>
 
 <hr>
+
+<div class="legal-links">
+        | <a href="{{ url_for('main.index') }}" style="color:#7ed957; text-decoration:none;">Startseite</a> |
+        <a href="{{ url_for('main.about') }}" style="color:#7ed957; text-decoration:none;">About</a> |
+        <a href="{{ url_for('main.privacy') }}" style="color:#7ed957; text-decoration:none;">Datenschutzerklärung</a> |
+        <a href="{{ url_for('main.impressum') }}" style="color:#7ed957; text-decoration:none;">Impressum</a> |
+        
+    </div>
 
 <div class="footer">
     Dieses Dokument wurde zuletzt am <strong>17. September 2025</strong> aktualisiert.<br>
