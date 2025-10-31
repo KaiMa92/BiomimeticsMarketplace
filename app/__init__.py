@@ -14,10 +14,10 @@ from ragpipeline.indexmanager.csvindexmanager import OpenalexIndexManager
 def create_app():
     app = Flask(__name__)
 
-    app.bio_sim = OpenalexIndexManager(host = 'gwdg', index_path = 'datasets/senckenberg_openalex/index')
+    app.bio_sim = OpenalexIndexManager(host = 'gwdg', llm = 'mistral-large-instruct', index_path = 'datasets/senckenberg_openalex/index')
     app.bio_sim.top_k = 30#100
 
-    app.eng_sim = OpenalexIndexManager(host = 'gwdg', index_path = 'datasets/livw_openalex/index')
+    app.eng_sim = OpenalexIndexManager(host = 'gwdg', llm = 'mistral-large-instruct', index_path = 'datasets/livw_openalex/index')
     app.eng_sim.top_k = 30#100
     
     # Register Blueprints or other app components

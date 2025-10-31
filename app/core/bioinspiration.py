@@ -14,6 +14,7 @@ from app.core.expertfinder import filter_by_keyword, author_ranking, get_citatio
 from .utils import agent_text
 from llama_index.core.llms import ChatMessage
 import pandas as pd
+from ragpipeline.load_models import Model
 
 def format_multiline(text):
     formatted_data = text.replace('\n', '<br>')
@@ -32,6 +33,7 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
     print('Categories: ' + categories)
 
     if "Product Idea" in categories:
+        #llm = Model(host = 'gwdg', model_type = 'llm', model_name = 'openai-gpt-oss-120b').model
         kmu_agent = agent_text('product_kmu_find')
         rank_agent = agent_text('product_ideas_rank')
         enrich_agent = agent_text('enrich_product_query')
