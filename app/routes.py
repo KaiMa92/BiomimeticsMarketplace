@@ -70,23 +70,17 @@ def impressum():
     """Rendert die Impressum-Seite."""
     return render_template('impressum.html')
 
-@main.route('/privacy')  # alternativ /datenschutz
+@main.route('/privacy')
 def privacy():
     """Rendert die Datenschutz-Seite."""
     return render_template('privacy.html')
-@main.route('/privacy.html')
-def privacy_legacy():
-    return redirect(url_for('main.privacy'))
 
 @main.route('/dpia')
 def dpia():
     """Rendert die DPIA-Dokumentations-Seite."""
     return render_template('dpia.html')
-@main.route('/dpia.html')
-def dpia_legacy():
-    return redirect(url_for('main.dpia'))
 
-@main.route('/about')  # alternativ /datenschutz
+@main.route('/about')
 def about():
     """Rendert die about Seite."""
     return render_template('about.html')
