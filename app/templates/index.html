@@ -10,7 +10,7 @@
         <div class="header-container">
             <img src="{{ url_for('static', filename='images/MarketplaceLogo.png') }}" alt="Main Logo" class="main-logo">
             <h2 class="subtitle">
-                Find experts from biology for your technical problem and support from engineering for research into biological phenomena.
+                Find experts from biology for your technical problem<br /> and support from engineering for research into biological phenomena.
             </h2>
         </div>
 
@@ -31,8 +31,12 @@
             </div>
         </main>
 
-        <p class="author-info">Experimental software - Prototype created by Max Kaiser at L-IVW GmbH as part of the BMFTR funding<br>
-              "Transferplattform für Biologie und Technik TVH:C" Förderkennzeichen 01IO2306C<br><br></p>
+        <p class="author-info" style="padding-bottom: 25px">
+            Experimental Software - Prototype<br />
+            Created by Max Kaiser at Leibniz-Institut f&uuml;r Verbundwerkstoffe GmbH<br />
+            as part of the project "Transferplattform für Biologie und Technik TVH:C", funded by the <br />
+            Bundesministerium für Forschung, Technologie und Raumfahrt (F&ouml;rderkennzeichen 01IO2306C)
+        </p>
         
         <div class="footer-section">
             <div class="footer-logos">
@@ -52,5 +56,13 @@
 
     </div>
     <script src="{{ url_for('static', filename='js/progress_update.js') }}"></script>
+    <!-- disable the button after click -->
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function() {
+            const startButton = document.getElementById('startButton');
+            startButton.disabled = true;
+            startButton.textContent = 'Searching...';
+        });
+    </script>
 </body>
 </html>

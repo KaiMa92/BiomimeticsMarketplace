@@ -71,8 +71,10 @@
         });
     </script>
     
-
-        <div class="footer-section">
+	<div style="display: flex; justify-content: center;">
+    	    <a href="{{ url_for('main.index') }}" class="techy-button" id="newSearch">New Search</a>
+	</div>
+        <div class="footer-section" style="margin-top: 20px">
             <div class="footer-logos">
                 <img src="{{ url_for('static', filename='images/BMFTR.jpg') }}" alt="Logo 1" class="footer-logo">
                 <img src="{{ url_for('static', filename='images/THM.png') }}" alt="Logo 2" class="footer-logo">

@@ -1,0 +1,30 @@
+# .dockerignore
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pytest cache
+.pytest_cache/
+.coverage
+
+# Git metadata
+.git/
+.gitignore
+
+# Docs, examples, datasets (if not needed in container)
+README.md
+
+# Environment and config files
+# .env
+# .env.example
+
+# OS and editor junk
+.DS_Store
+Thumbs.db
+
+# Other local files
+*.log
+

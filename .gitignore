@@ -20,15 +20,15 @@ app\static\images
 datasets
 
 # Agents
-agents
+#agents
 
 # C extensions
 *.so
 
 #impressum, about and privacy
-impressum.html
-privacy.html
-about.html
+#impressum.html
+#privacy.html
+#about.html
 
 # Distribution / packaging
 .Python

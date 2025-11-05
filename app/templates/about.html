@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='images/MarketplaceLogo.png') }}" alt="Main Logo" class="main-logo">
+            <h2 class="subtitle">
+                "Transferplattform für Biologie und Technik TVH:C" <br>
+                Funded by BMFTR: Grant No. 01IO2306C
+            </h2>
+        </div>
+
+        <main class="content-wrapper-results">
+            <section>
+                <h3>Project Hardfacts</h3>
+                <p>
+                    Project name: "Transferplattform für Biologie und Technik TVH:C"<br>
+                    Funding: approximately € 1,000,000<br>
+                    Funding body: BMFTR (Grant No. 01IO2306C)<br>
+                    Project start: Spring 2024<br>
+                    Partners: Senckenberg Gesellschaft für Naturforschung, Technische Hochschule Mittelhessen, and Leibniz-Institut für Verbundwerkstoffe
+                </p>
+            </section>
+
+            <section>
+                <h3>Biomimetics Marketplace Platform</h3>
+                <p> The platform is designed to strengthen knowledge transfer between scientific disciplines and to make interdisciplinary collaboration easier and more efficient. 
+                    Biomimetics serves here as a guiding example: translating biological insights into technical solutions has historically been a long and complex process. 
+                    Well-known cases, such as the sharkskin-inspired riblet surfaces for aircraft, the fin-ray effect in the powerpress, or the lotus-effect in self-cleaning paints, 
+                    often required decades of research, development, and cross-disciplinary exchange—frequently involving biologists, physicists, materials scientists, mechanical engineers, and industry partners. 
+                </p> 
+                <p> These examples highlight a fundamental challenge: the translation from nature to technology rarely works as a direct idea-to-product pipeline. 
+                    Instead, it requires experts with different backgrounds to recognize each other’s relevance, exchange knowledge, and jointly move through multiple stages of analysis, 
+                    hypothesis development, experimentation, prototyping, and process optimization. 
+                    Therefore, rather than trying to produce ready-made solutions, the platform focuses on connecting the right people. 
+                </p> 
+                <p> The marketplace concept addresses this challenge by enabling users to search for expertise across unfamiliar domains. 
+                    Engineers can find biologists who understand the underlying natural mechanisms associated with their technical questions. 
+                    Biologists can find engineers who can help analyze, model, or translate natural strategies into technical concepts.  
+                </p>
+                <p>
+    In addition, the platform is designed to support small and medium-sized enterprises (SMEs) in exploring biological knowledge spaces that are often difficult to access. Scientific publications in biology typically use highly domain-specific terminology, and their relevance to a technical problem is not always obvious at first glance. By providing an intuitive search interface and linking queries to current biological research, the platform performs an initial layer of “translation” between technical challenges and biological concepts. This lowers the barrier for SMEs to engage with scientific literature and encourages new perspectives and idea generation through contact with experts from other fields.
+</p>
+<p>
+    An equally important goal is to make the first step of communication easier. Experience shows that reaching out to scientists by referring directly to their own research is one of the most effective ways to start a constructive, respectful conversation and to initiate a shared brainstorming process. In this way, the platform not only helps identify relevant expertise, but also fosters a meaningful starting point for collaboration and innovation on equal footing.
+</p>
+
+                <p>
+                    To keep access open and remove paywalls, the platform relies on open-source tools and free scientific services such as OpenAlex and
+                    LlamaIndex. The large language models (LLMs) are hosted by GWDG in Göttingen, which supports GDPR-compliant use of their service.
+                </p>
+            </section>
+
+            <section>
+                <h4>Key Requirements for Implementation</h4>
+                    <ul>
+                        <li><strong>Accessibility.</strong> The platform relies exclusively on open-source tools and freely available scientific data. This ensures that there are no paywalls and that access remains open to all users.</li>
+                        <li><strong>Ease of Use.</strong> No prior knowledge is required. Users can simply type a free-text search query—there is no operational or conceptual entry barrier.</li>
+                        <li><strong>Minimal Maintenance Effort.</strong> The underlying data is processed “as is,” without manual pre-categorization. This not only reduces platform maintenance costs, but also preserves the nuance of biological terminology that would otherwise be lost through predefined labeling.</li>
+                        <li><strong>Data from Current Research.</strong> To ensure relevance and scientific accuracy, the platform draws directly from up-to-date literature in biodiversity, biology, anatomy, taxonomy, and functional morphology.</li>
+                        <li><strong>GDPR Compliance.</strong> The handling of user search queries is designed to meet European data protection requirements.</li>
+                        <li><strong>Reduced Risk of Hallucination.</strong> Large Language Models are used in combination with retrieval-augmented search techniques. The models refer to verified scientific publications and metadata to reduce speculative output.</li>
+                    </ul>
+
+                    <p>
+                        The idea conception, technical architecture, software design, and implementation of the platform were carried out by a single researcher at the Leibniz-Institut für Verbundwerkstoffe (IVW). This concentrated development approach allowed for rapid prototyping, iterative refinement, and consistent alignment of scientific, technical, and user-centered requirements.
+                    </p>
+            </section>
+
+            <section>
+                <h4>How to Use</h3>
+                <p>
+                    The entry barrier is intentionally low: no prior knowledge required. Simply use the single free-text search field on the start page.
+                </p>
+                <p>
+                    What happens after you click "Search":
+                </p>
+                <ul>
+                    <li>Your query is categorized to understand who is asking and what is needed.</li>
+                    <li>Categories: Engineer, Biology, Product Idea, or Unrelated.</li>
+                    <li>The system enriches your query and searches relevant literature and experts.</li>
+                    <li>Results highlight top-matching experts, summaries of their work, affiliations, and source references.</li>
+                </ul>
+                <h4>When engineers search for help</h4>
+                <ul>
+                    <li>Your query is enriched with relevant biology terms (for example: biodiversity, taxonomy, anatomy, functional morphology).</li>
+                    <li>We search a pre-indexed (vectorized) database of publication metadata (especially abstracts) from the Senckenberg Society, sourced from the open platform OpenAlex and filtered by location.</li>
+                    <li>The top 30 publications are retrieved.</li>
+                    <li>The top 3 authors are determined based on how often they appear and their authorship position (first author is weighted higher than second, and so on).</li>
+                    <li>All abstracts for each of the top 3 authors are analyzed by an LLM relative to your original query, and the content is summarized.</li>
+                    <li>The results highlight the best-matching Senckenberg experts for your topic, with references and concise summaries of their expertise.</li>
+                </ul>
+                <h4>When biologists search for help</h4>
+                <ul>
+                    <li>The same pipeline is applied, with the search focused on engineering publications currently limited to the Leibniz-Institut für Verbundwerkstoffe GmbH.</li>
+                    <li>Results follow the same format: top experts, affiliations, references, and query-focused summaries.</li>
+                </ul>
+                <h4>When biologists explore product ideas</h4>
+                <ul>
+                    <li>The LLM helps brainstorm meaningful product ideas or improvements where the observed biological phenomenon could be applied.</li>
+                    <li>Ideas are ranked for innovativeness and feasibility.</li>
+                    <li>For the top 3 ideas, the output includes the product concept, potential companies (SMEs) where applicable, the underlying technology, and how the biology aligns with it.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h4>Examples</h3>
+                <p>
+                    Example queries to get started:
+                </p>
+                <ul>
+                    <li>Engineer: "How can I reduce vibration in a gearbox design?"</li>
+                    <li>Biology: "I have microscopy images of neuron networks—can engineers help quantify connectivity?"</li>
+                    <li>Product Idea: "The razor clam can dig into sediment very efficiently by transforming surrounding material into quicksand."</li>
+                    <li>Unrelated: "Define DNA." (This will be flagged as unrelated.)</li>
+                </ul>
+            </section>
+        </main>
+
+<div class="footer-section">
+            <div class="footer-logos">
+                <img src="{{ url_for('static', filename='images/BMFTR.jpg') }}" alt="Logo 1" class="footer-logo">
+                <img src="{{ url_for('static', filename='images/THM.png') }}" alt="Logo 2" class="footer-logo">
+                <img src="{{ url_for('static', filename='images/Senckenberg.png') }}" alt="Logo 3" class="footer-logo">
+                <img src="{{ url_for('static', filename='images/IVW.png') }}" alt="Logo 4" class="footer-logo">
+            </div>
+        </div>
+
+<div class="legal-links">
+        | <a href="{{ url_for('main.index') }}" style="color:#7ed957; text-decoration:none;">Startseite</a> |
+        <a href="{{ url_for('main.about') }}" style="color:#7ed957; text-decoration:none;">About</a> |
+        <a href="{{ url_for('main.privacy') }}" style="color:#7ed957; text-decoration:none;">Datenschutzerklärung</a> |
+        <a href="{{ url_for('main.impressum') }}" style="color:#7ed957; text-decoration:none;">Impressum</a> |
+        
+    </div>
+</div>  
+</body>
+</html>

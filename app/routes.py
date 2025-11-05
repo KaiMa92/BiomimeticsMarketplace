@@ -58,7 +58,7 @@ def results():
             result_dct = json.loads(f.read())
         os.remove('result.json')
     else: 
-        session['error_message'] = ''
+        session['error_message'] = 'NO JSON ON DISK'
         return redirect(url_for('main.index'))
 
     print("results: result_dct:")
