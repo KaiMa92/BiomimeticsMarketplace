@@ -74,6 +74,17 @@ def impressum():
 def privacy():
     """Rendert die Datenschutz-Seite."""
     return render_template('privacy.html')
+@main.route('/privacy.html')
+def privacy_legacy():
+    return redirect(url_for('main.privacy'))
+
+@main.route('/dpia')
+def dpia():
+    """Rendert die DPIA-Dokumentations-Seite."""
+    return render_template('dpia.html')
+@main.route('/dpia.html')
+def dpia_legacy():
+    return redirect(url_for('main.dpia'))
 
 @main.route('/about')  # alternativ /datenschutz
 def about():
