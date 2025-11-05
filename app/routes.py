@@ -33,18 +33,26 @@ def start():
         #for output in biomimetics_marketplace(query, current_app.llm, current_app.eng_sim, current_app.bio_sim):
         for output in biomimetics_marketplace(query, current_app.eng_sim, current_app.bio_sim):
             if output['type'] == 'progress':
+                print("output['type'] == 'progress'")
                 yield f"data: {output['message']}\n\n"
             elif output['type'] == 'redirect':
+                print("output['type'] == 'redirect'")
                 # Stream a redirect event that the frontend can handle
                 yield f"event: redirect\ndata: {output['url']}\n\n"
                 return
             elif output['type'] == 'results':
+                print("output['type'] == 'results'")
                 result_dct = output['data']
+                print(f"result_dct = {output['data']}")
                 # Persist json on harddrive
+                print(f"os.getcwd() = {os.getcwd()}")
                 if os.path.exists('result.json'):
+                    print("remove json")
                     os.remove('result.json')
+                print('save json')
                 with open('result.json', 'w') as f:
                     json.dump(result_dct, f, indent=4)
+                print(f"os.path.exists('result.json') = {os.path.exists('result.json')}")
                 # Now yield the final done event
                 yield f"event: done\ndata: {json.dumps(result_dct)}\n\n"
 
@@ -53,7 +61,11 @@ def start():
 @main.route('/results')
 def results():
     # Retrieve the result_dct from the session and parse it as JSON
+    print("load json")
+    print(f"os.getcwd() = {os.getcwd()}")
     if os.path.exists('result.json'):
+        print('json exist')
+        print('read json')
         with open('result.json', 'r') as f:
             result_dct = json.loads(f.read())
         os.remove('result.json')
