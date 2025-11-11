@@ -10,6 +10,9 @@ WORKDIR /biomimetics_app
 # Copy requirements first (for caching)
 COPY requirements.txt .
 
+# Install git (needed if requirements.txt uses git+ URLs)
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -18,9 +21,6 @@ COPY . ./
 
 # Fix permissions: give appuser ownership of the project directory
 RUN chown -R appuser:appuser /biomimetics_app
-
-# Install local module rag_pipeline
-RUN pip install --no-cache-dir --root-user-action=ignore ./rag_pipeline
 
 # Switch to non-root user
 USER appuser
