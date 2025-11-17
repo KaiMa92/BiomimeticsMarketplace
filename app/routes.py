@@ -12,7 +12,6 @@ from flask import Blueprint, render_template, request, current_app, jsonify, ses
 from app.core.bioinspiration import biomimetics_marketplace, biomimetics_marketplace_dummy
 from flask.sessions import SecureCookieSessionInterface
 import json
-import os
 
 main = Blueprint('main', __name__)
 
@@ -44,37 +43,15 @@ def start():
                 print("output['type'] == 'results'")
                 result_dct = output['data']
                 print(f"result_dct = {output['data']}")
-                # Persist json on harddrive
-                print(f"os.getcwd() = {os.getcwd()}")
-                if os.path.exists('result.json'):
-                    print("remove json")
-                    os.remove('result.json')
-                print('save json')
-                with open('result.json', 'w') as f:
-                    json.dump(result_dct, f, indent=4)
-                print(f"os.path.exists('result.json') = {os.path.exists('result.json')}")
-                # Now yield the final done event
+                # Stream final result payload to the client; client stores it in sessionStorage
                 yield f"event: done\ndata: {json.dumps(result_dct)}\n\n"
 
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 @main.route('/results')
 def results():
-    # Retrieve the result_dct from the session and parse it as JSON
-    print("load json")
-    print(f"os.getcwd() = {os.getcwd()}")
-    if os.path.exists('result.json'):
-        print('json exist')
-        print('read json')
-        with open('result.json', 'r') as f:
-            result_dct = json.loads(f.read())
-        os.remove('result.json')
-    else: 
-        session['error_message'] = 'NO JSON ON DISK'
-        return redirect(url_for('main.index'))
-
-    print("results: result_dct:")
-    print(result_dct)
+    # Render template with any fallback data (normally client provides data via sessionStorage)
+    result_dct = session.pop('results_data', {})
     return render_template('results.html', results_data=result_dct)
 
 @main.route('/impressum')

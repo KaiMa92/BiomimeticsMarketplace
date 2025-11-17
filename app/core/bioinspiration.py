@@ -148,6 +148,7 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
         df_top["summary"] = summaries
 
         df_top['affiliations'] = df_top['affiliations'].str[0]
+        print('progress: Transform output')
         yield {'type': 'progress', 'message': 'Transform output...'}
         
         records = (

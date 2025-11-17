@@ -27,9 +27,8 @@ document.getElementById('searchForm').onsubmit = function(event) {
     source.addEventListener('done', function(event) {
         source.close();
         console.log('Received done event with data:', event.data); // Debugging
-        var data = JSON.parse(event.data);
-        var queryId = data.query_id;
-        console.log('Extracted queryId:', queryId); // Debugging
+        // Persist results in sessionStorage so /results can render without server-side file I/O
+        sessionStorage.setItem('resultsData', event.data);
 
         // Hide the progress container and redirect to results page
         progressContainer.style.display = 'none';

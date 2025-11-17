@@ -16,9 +16,9 @@
     <div class="content-wrapper-results">
         <div class="container">
 
-            <!-- Display Query and Location -->
-            <h2 id="query">{{ results_data.Query }}</h1>
-            <h2 id="location">Search for experts in {{ results_data.Location }}</h2>
+            <!-- Display Query and Location (filled by JS, defaults shown if provided server-side) -->
+            <h2 id="query">{{ results_data.Query|default('') }}</h2>
+            <h2 id="location">{% if results_data.Location %}Search for experts in {{ results_data.Location }}{% endif %}</h2>
             <!-- Placeholder for dynamically loaded content -->
             <div class="carousel" id="results-carousel">
                 <!-- Results will be dynamically injected here -->
@@ -35,13 +35,33 @@
     <!--<script src="{{ url_for('static', filename='js/buttons.js') }}"></script> -->
     <!--<script src="{{ url_for('static', filename='js/load_query.js') }}"></script> -->
     <script>
-        const resultsData =  {{results_data|tojson|safe}};  // Pass the results data from Flask to JavaScript
+        // Try to load results from sessionStorage (primary flow); fallback to server-provided data if present
+        const stored = sessionStorage.getItem('resultsData');
+        let resultsData = {};
+        if (stored) {
+            try {
+                resultsData = JSON.parse(stored);
+            } catch (e) {
+                console.error('Failed to parse resultsData from sessionStorage', e);
+            }
+            sessionStorage.removeItem('resultsData');
+        }
+        if (!Object.keys(resultsData).length) {
+            resultsData = {{ results_data|tojson|default('{}', true)|safe }};
+        }
 
         $(document).ready(function() {
-            const authors = resultsData.Authors;
+            const authors = resultsData.Authors || [];
             const carousel = $('#results-carousel');
 
-            if (authors.length === 0) {
+            if (resultsData.Query) {
+                $('#query').text(resultsData.Query);
+            }
+            if (resultsData.Location) {
+                $('#location').text(`Search for experts in ${resultsData.Location}`);
+            }
+
+            if (!authors.length) {
                 $('#no-results-message').show();
             } else {
                 authors.forEach(author => {

@@ -1,0 +1,54 @@
+services:
+  # ---------------------------
+  # Traefik
+  # ---------------------------
+  traefik:
+    image: traefik:v3.0
+    container_name: biomimetics-traefik
+    command:
+      # Enable dashboard
+      - "--api.insecure=true"
+
+      # Enable Docker provider
+      - "--providers.docker=true"
+
+      # Enable file provider (for TLS config)
+      - "--providers.file.filename=/traefik/tls.yml"
+
+      # Define HTTPS entrypoint
+      - "--entrypoints.websecure.address=:3001"
+      - "--entrypoints.websecure.http.tls=true"
+      
+      # (Optional) Increase timeouts for long streaming responses
+      - "--entrypoints.websecure.transport.respondingTimeouts.readTimeout=300s"
+      - "--entrypoints.websecure.transport.respondingTimeouts.writeTimeout=300s"
+
+    ports:
+      - "3001:3001"   # HTTPS
+      - "8080:8080"   # Dashboard
+
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./certs:/certs:ro"
+      - "./traefik:/traefik:ro"
+
+    restart: unless-stopped
+
+  # ---------------------------
+  # Flask App
+  # ---------------------------
+  bio_app:
+    image: biomimetics_app
+    deploy:
+      replicas: 5
+      restart_policy:
+        condition: any
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bio_app.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.bio_app.entrypoints=websecure"
+      - "traefik.http.routers.bio_app.tls=true"
+      - "traefik.http.services.bio_app.loadbalancer.server.port=5000"
+    env_file:
+      - .env
+    restart: unless-stopped
