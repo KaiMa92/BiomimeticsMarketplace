@@ -7,30 +7,34 @@ services:
     container_name: biomimetics-traefik
     command:
       # Enable dashboard
-      - "--api.insecure=true"
+      - "--api.dashboard=true"
 
       # Enable Docker provider
       - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
 
-      # Enable file provider (for TLS config)
-      - "--providers.file.filename=/traefik/tls.yml"
+      # HTTP & HTTPS entrypoints
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
 
-      # Define HTTPS entrypoint
-      - "--entrypoints.websecure.address=:3001"
-      - "--entrypoints.websecure.http.tls=true"
-      
-      # (Optional) Increase timeouts for long streaming responses
-      - "--entrypoints.websecure.transport.respondingTimeouts.readTimeout=300s"
-      - "--entrypoints.websecure.transport.respondingTimeouts.writeTimeout=300s"
+      # Redirect HTTP -> HTTPS
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+
+      # Let's Encrypt HTTP-01
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=makaiser@rhrk.uni-kl.de"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
 
     ports:
-      - "3001:3001"   # HTTPS
-      - "8080:8080"   # Dashboard
+      - "80:80"      # HTTP
+      - "443:443"    # HTTPS
+      - "8080:8080"  # Traefik dashboard (optional)
 
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./certs:/certs:ro"
-      - "./traefik:/traefik:ro"
+      - "./letsencrypt:/letsencrypt"
 
     restart: unless-stopped
 
@@ -38,16 +42,20 @@ services:
   # Flask App
   # ---------------------------
   bio_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: biomimetics_app
     deploy:
-      replicas: 5
+      replicas: 3
       restart_policy:
         condition: any
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.bio_app.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.bio_app.rule=Host(`bionikmarktplatz.de`)"
       - "traefik.http.routers.bio_app.entrypoints=websecure"
       - "traefik.http.routers.bio_app.tls=true"
+      - "traefik.http.routers.bio_app.tls.certresolver=letsencrypt"
       - "traefik.http.services.bio_app.loadbalancer.server.port=5000"
     env_file:
       - .env
