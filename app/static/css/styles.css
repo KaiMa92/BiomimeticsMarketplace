@@ -6,12 +6,40 @@ html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+:root {
+    --bg-color: #1f2130;
+    --text-color: #ffffff;
+    --accent-color: #7ed957;
+    --max-content-width: 960px;
+    --page-padding: clamp(20px, 5vw, 48px);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+h1, h2, h3, h4 {
+    color: var(--text-color);
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0 0 12px 0;
+}
+
+h2 {
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+}
+
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #1f2130; /* Dark background */
-    color: #ffffff; /* White text */
+    background-color: var(--bg-color);
+    color: var(--text-color);
     margin: 0;
     line-height: 1.6;
     font-size: 16px;
@@ -26,18 +54,23 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* Center content with constraints */
-    max-width: 900px;
+    width: 100%;
+    max-width: var(--max-content-width);
     margin: 0 auto;
-    padding: 40px 20px; /* Padding around overall content */
-    box-sizing: border-box;
+    padding: var(--page-padding);
 }
 
 .content-wrapper-results {
-    max-width: 900px;
+    width: 100%;
+    max-width: var(--max-content-width);
     margin: 0 auto;
-    padding: 40px 20px;
-    box-sizing: border-box;
+    padding: var(--page-padding);
+}
+
+.container {
+    width: 100%;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
 }
 
 /* Header at the top */
@@ -48,17 +81,17 @@ body {
 }
 
 .main-logo {
-    width: 500px;
-    height: auto;
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: clamp(240px, 60vw, 420px);
+    margin: 0 auto 20px auto;
 }
 
 .subtitle {
-    font-size: 1.2em;
-    color: #ffffff;
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    color: var(--text-color);
     line-height: 1.4;
     text-align: center;
-    margin: 0 auto 40px auto;
+    margin: 0 auto 32px auto;
 }
 
 /* main stretches to fill space between header and author-info/footer */
@@ -68,24 +101,42 @@ main {
     flex-direction: column;
 }
 
+#query, #location {
+    text-align: center;
+    word-break: break-word;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+}
+
+#location {
+    font-size: clamp(1.05rem, 2.8vw, 1.25rem);
+    font-weight: 500;
+}
+
 /* Search form at the top of main (no grow) */
 .search-form {
+    width: 100%;
     max-width: 720px;
     margin: 0 auto 20px auto; /* some space below form to separate from progress */
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: stretch;
     flex-shrink: 0;
 }
 
 .search-input {
     background: transparent;
-    border: 2px solid #7ed957;
-    color: #ffffff;
-    padding: 10px;
-    font-size: 16px;
-    width: 600px;
+    border: 2px solid var(--accent-color);
+    color: var(--text-color);
+    padding: 12px;
+    font-size: clamp(1rem, 2vw, 1.05rem);
+    width: 100%;
+    max-width: 640px;
+    min-width: 0;
+    flex: 1 1 320px;
     box-sizing: border-box;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 .search-input::placeholder {
@@ -98,17 +149,18 @@ main {
 }
 
 .techy-button {
-    background: #7ed957;
+    background: var(--accent-color);
     color: #1f2130;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 20px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 0.95rem;
     text-transform: uppercase;
     font-weight: bold;
-    border-radius: 4px;
+    min-height: 44px;
+    border-radius: 6px;
     transition: box-shadow 0.2s ease-in-out;
-    margin-left: 10px;
+    margin-left: 0;
 }
 
 .techy-button:hover {
@@ -190,6 +242,10 @@ main {
     width: 100%;
 }
 
+#results-carousel {
+    margin-top: 24px;
+}
+
 .carousel-item {
     position: relative;
     box-sizing: border-box;
@@ -225,8 +281,9 @@ main {
 }
 
 p {
-    font-size: 16px;
-    margin-top: 10px;
+    font-size: clamp(1rem, 2.2vw, 1.05rem);
+    margin: 10px 0;
+    color: var(--text-color);
 }
 
 /* Error message styling */
@@ -252,7 +309,7 @@ p {
 /* Style for author name */
 .author-name {
     font-style: bold;
-    font-size: 1.4em; /* Same size as the subtitle */
+    font-size: clamp(1.2rem, 3vw, 1.4rem); /* Same size as the subtitle */
     color: #ffffff;
     line-height: 1.4;
     text-align: center;
@@ -262,7 +319,7 @@ p {
 /* Style for affiliations */
 .affiliations {
     font-style: italic;
-    font-size: 1.2em; /* Larger text */
+    font-size: clamp(1.05rem, 2.8vw, 1.2rem); /* Larger text */
     color: #ffffff;
     text-align: left;
     margin: 0 auto 20px auto;
@@ -270,7 +327,7 @@ p {
 
 /* Style for summary */
 .summary {
-    font-size: 1em; /* Easy to read size */
+    font-size: clamp(0.98rem, 2.6vw, 1.05rem); /* Easy to read size */
     color: #ffffff;
     text-align: justify;
     text-justify: inter-word;
@@ -280,7 +337,7 @@ p {
 /* Style for references title */
 .references-title {
     font-weight: bold;
-    font-size: 1.2em; /* Larger text */
+    font-size: clamp(1.05rem, 2.8vw, 1.2rem); /* Larger text */
     color: #ffffff;
     text-align: left;
     margin: 0 auto 10px auto;
@@ -288,8 +345,67 @@ p {
 
 /* Style for references */
 .references {
-    font-size: 1em;
+    font-size: clamp(0.98rem, 2.6vw, 1.05rem);
     color: #ffffff;
     text-align: left;
     margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+    .main-logo {
+        max-width: min(70vw, 300px);
+    }
+}
+
+@media (max-width: 768px) {
+    .content-wrapper,
+    .content-wrapper-results {
+        padding: clamp(16px, 5vw, 28px);
+    }
+
+    .header-container {
+        margin-bottom: 12px;
+    }
+
+    .subtitle {
+        margin-bottom: 24px;
+    }
+
+    .search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .techy-button {
+        width: 100%;
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .footer-logo {
+        max-height: 80px;
+    }
+
+    .author-info {
+        font-size: 0.95rem;
+    }
+
+    .carousel-image {
+        max-height: 360px;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 15px;
+    }
+
+    .subtitle {
+        font-size: clamp(1rem, 4vw, 1.15rem);
+    }
+
+    #query, #location {
+        font-size: clamp(1.05rem, 4vw, 1.35rem);
+    }
 }
