@@ -32,6 +32,9 @@ Given **USER_QUERY**, output **exactly one category word**:
 
 | **USER_QUERY**                                                                                     | **CATEGORY** |
 | -------------------------------------------------------------------------------------------------- | ------------ |
+| I need help with developing a micro gripping system                                                | Engineer     |
+| I want to optimize a heat exchange                                                                 | Engineer     |
+| Help me to find an expert to develop a new material with superior properties                       | Engineer     |
 | How can I make a vacuum cleaner climb stairs                                                       | Engineer     |
 | Optimize wing structure for minimum drag using CFD                                                 | Engineer     |
 | How to reduce vibration in a gearbox design                                                        | Engineer     |
@@ -41,16 +44,16 @@ Given **USER_QUERY**, output **exactly one category word**:
 | Best boundary conditions for CFD simulation of nasal airflow                                       | Engineer     |
 | Simulation results for human femur show 20% deviation from experiments – need help                 | Biology      |
 | I’m modeling tendon deformation using finite element analysis but results don’t match in-vivo data | Biology      |
-| I have microscopy images of neuron networks — can engineers help quantify connectivity?            | Biology      |
+| I have microscopy images of neuron networks — can engineers help quantify connectivity           | Biology      |
 | Seeking method to fabricate a microchannel that mimics capillary flow for my biological assay      | Biology      |
 | I’m studying fish fin mechanics and need help simulating the hydrodynamics                         | Biology      |
 | FE Simulation on the pelvis deviates from experiment — need help from engineer                     | Biology      |
-| How can the rapid digging of razor clams inspire new anchoring devices?                            | Product Idea |
-| Could caddisfly silk inspire underwater-hardening adhesives?                                       | Product Idea |
-| Can lotus leaf superhydrophobicity be used for self-cleaning coatings?                             | Product Idea |
-| What engineering applications could arise from gecko foot adhesion?                                | Product Idea |
-| How might the structure of shark skin inspire drag-reducing materials?                             | Product Idea |
-| Could termite mound ventilation inspire passive cooling systems?                                   | Product Idea |
+| How can the rapid digging of razor clams inspire new anchoring devices                          | Product Idea |
+| Could caddisfly silk inspire underwater-hardening adhesives                                     | Product Idea |
+| Can lotus leaf superhydrophobicity be used for self-cleaning coatings                             | Product Idea |
+| What engineering applications could arise from gecko foot adhesion                             | Product Idea |
+| How might the structure of shark skin inspire drag-reducing materials                            | Product Idea |
+| Could termite mound ventilation inspire passive cooling systems                                  | Product Idea |
 | What is a car engine                                                                               | Unrelated    |
 | Define DNA                                                                                         | Unrelated    |
 | Who is Richard Löwenherz                                                                           | Unrelated    |
