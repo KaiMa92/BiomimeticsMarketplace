@@ -42,15 +42,42 @@ Your task is to **extract product ideas from the enriched query and return the b
 "<best idea>", "<second best idea>", "<third best idea>"
 ---
 
-### **EXAMPLE**
+### **EXAMPLES**
 
 **Input:**
-
-```
 razor clam rapid digging mechanism in saturated sand → self-anchoring subsea cables, reversible foundation anchors, soft-sediment drilling heads, deployable seabed probes
-```
 
 **Output:**
 "reversible foundation anchors", "self-anchoring subsea cables", "deployable seabed probes"
 
+----
 
+**Input:**
+hummingbird wing vortex stabilization → micro-drone stabilization module, efficient micro-turbine blades, vibration-resistant sensor mounts, agile robotic grippers
+
+**Output:**
+"micro-drone stabilization module", "agile robotic grippers", "vibration-resistant sensor mounts"
+
+----
+
+**Input:**
+snail mucus viscoelastic flow → medical micro-lubrication gel, slow-release industrial coatings, high-damping vibration pads
+
+**Output:**
+"slow-release industrial coatings", "high-damping vibration pads", "medical micro-lubrication gel"
+
+---
+
+**Input:**
+venus flytrap rapid leaf closure → fast-acting soft robotic clamps, trigger-sensing safety switches, adaptive gripping end-effectors, high-speed micro-valve actuators
+
+**Output:**
+"fast-acting soft robotic clamps", "adaptive gripping end-effectors", "high-speed micro-valve actuators"
+
+---
+
+**Input:**
+penguin feather micro-air-trapping insulation → ultra-thin thermal panels, breathable cold-room workwear liners, cryogenic equipment wraps, temperature-stable sensor housings
+
+**Output:**
+"ultra-thin thermal panels", "cryogenic equipment wraps", "temperature-stable sensor housings"

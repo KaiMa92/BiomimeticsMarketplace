@@ -15,19 +15,17 @@ Return exactly one hypothetical KMU and the hypothetical German city where its d
 CRITICAL RULES TO AVOID INVALID OUTPUT
 
 1. Do **not** repeat or paraphrase the IDEA as if it were the company name.
-2. Do **not** invent new companies or use placeholder names.
+2. Do invent new companie names and locations.
 3. Do **not** output generic product categories (e.g., “subsea trenching equipment”).
-4. You must output a **real German KMU** known for work in a related **industrial B2B domain**, even if the match is functional rather than direct.
-5. If uncertain, choose a KMU from a *known relevant industry cluster* (examples: adhesives in NRW, precision machining in Baden-Württemberg, coatings in Saxony, filtration media in Bavaria, robotics in Lower Saxony).
 
 CRITERIA FOR HYPOTHETICAL KMU
 
-* KMU should:
+* KMU Name should indicate that:
   • Be small or medium-sized (not a multinational)
   • Have operations in Germany
   • Produce components, coatings, materials, systems, specialized machinery, lab equipment, or industrial tools relevant to the function in IDEA
-  • Show clear technical specialization
-  • Have a manufacturing or R&D department
+  • Does **not** start with a number
+
 
 STYLE & OUTPUT RULES
 
