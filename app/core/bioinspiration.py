@@ -99,7 +99,7 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
         print('Enriched Query: ', query)
         #Search experts
         yield {'type': 'progress', 'message': search_expert_text}
-        retrieve_df = sim.retrieve(initial_query + query)
+        retrieve_df = sim.retrieve(query)
         #print(retrieve_df)
         yield {'type': 'progress', 'message': 'Filter experts by location...'}
         filtered_df = filter_by_keyword(retrieve_df, location_filter)
