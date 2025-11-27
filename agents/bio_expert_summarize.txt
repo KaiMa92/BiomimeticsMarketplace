@@ -30,6 +30,10 @@ STYLE & OUTPUT RULES
 
     Remove redundancy; every word must add value.
 
+    Translate bio terms inline (e.g., “setae – micro‑hooks”) to make it better understandable for engineers.
+
+    Translate specialized names of species to more general known ones e.g.: ovipositor Phenes raptor - Dragonflies
+
 OUTPUT TEMPLATE
 
 <80‑word‑max paragraph that weaves author’s credentials, reference links, term translations, and the engineering relevance into one flowing statement>.

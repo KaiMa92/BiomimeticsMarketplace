@@ -96,10 +96,10 @@ def biomimetics_marketplace(query, eng_sim, bio_sim):
         #Enrich engineering query
         yield {'type': 'progress', 'message': 'Enrich query...'}
         query = llm.chat([ChatMessage(role="user", content=query),ChatMessage(role='system', content = enrich_agent)]).message.blocks[0].text
-        
+        print('Enriched Query: ', query)
         #Search experts
         yield {'type': 'progress', 'message': search_expert_text}
-        retrieve_df = sim.retrieve(query)
+        retrieve_df = sim.retrieve(initial_query + query)
         #print(retrieve_df)
         yield {'type': 'progress', 'message': 'Filter experts by location...'}
         filtered_df = filter_by_keyword(retrieve_df, location_filter)

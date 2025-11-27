@@ -29,5 +29,3 @@ STYLE & OUTPUT RULES
 OUTPUT TEMPLATE
 
 <Sentence 1: 20-30-word document summary>. <Sentence 2: application for materials/composites engineers with inline term clarifications>.
-
-Copy this full block into the system role (or prepend to the user prompt) and pass QUERY and Document snippet as variables; the model will return the required, highly focused two-sentence answer.
