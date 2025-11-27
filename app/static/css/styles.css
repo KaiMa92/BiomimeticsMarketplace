@@ -125,6 +125,35 @@ main {
     flex-shrink: 0;
 }
 
+
+.example-queries {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto 12px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.example-query-button {
+    flex: 1 1 220px;
+    min-width: 200px;
+    background: rgba(126, 217, 87, 0.1);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    text-transform: none;
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.example-query-button:hover,
+.example-query-button:focus-visible {
+    background: var(--accent-color);
+    color: #1f2130;
+}
+
 .search-input {
     background: transparent;
     border: 2px solid var(--accent-color);

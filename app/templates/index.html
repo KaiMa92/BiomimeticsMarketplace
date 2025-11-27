@@ -22,6 +22,18 @@
                 <button type="submit" id="startButton" class="techy-button">Search</button>
             </form>
 
+            <div class="example-queries">
+                <button type="button" class="techy-button example-query-button" data-query="Develop a gripping system for various sized objects">
+                    Develop a gripping system for various sized objects
+                </button>
+                <button type="button" class="techy-button example-query-button" data-query="Understand the mechanical properties of layerd structures">
+                    Understand the mechanical properties of layerd structures
+                </button>
+                <button type="button" class="techy-button example-query-button" data-query="Razor clam diggs very efficient by creating quicksand">
+                    Razor clam diggs very efficient by creating quicksand
+                </button>
+            </div>
+
             {% if error_message %}
             <p class="error-message">{{ error_message }}</p>
             {% endif %}
@@ -59,10 +71,25 @@
     <script src="{{ url_for('static', filename='js/progress_update.js') }}"></script>
     <!-- disable the button after click -->
     <script>
-        document.getElementById('searchForm').addEventListener('submit', function() {
-            const startButton = document.getElementById('startButton');
+        const searchForm = document.getElementById('searchForm');
+        const startButton = document.getElementById('startButton');
+        const searchInput = document.getElementById('search');
+
+        searchForm.addEventListener('submit', function() {
             startButton.disabled = true;
             startButton.textContent = 'Searching...';
+        });
+
+        document.querySelectorAll('.example-query-button').forEach((button) => {
+            button.addEventListener('click', () => {
+                const query = button.getAttribute('data-query');
+                searchInput.value = query;
+                if (typeof searchForm.requestSubmit === 'function') {
+                    searchForm.requestSubmit(startButton);
+                } else {
+                    startButton.click();
+                }
+            });
         });
     </script>
 </body>
